@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Document</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo_img">
+            <img src={% static "media/logo.svg" %}>
+          <h1 class="logo_text">MYLOG</h1>
+  
+      </div>
+    <ul>
+        <nav class="nav_area"> 
+            <ul class="nav_ist">
+                <li class="nav_item"><a href="">일상</a></li>
+                <li class="nav_item"><a href="">요리</a></li>
+                <li class="nav_item"><a href="">여행</a></li>
+                <li class="nav_item"><a href="">영화</a></li>
+                <li class="nav_item"><a href="">IT</a></li>
+                <li class="header_login"><button class="login_button">login</button></li>
+            </ul>
+            </ul>
+          </nav>
+    </ul>
+    </header>
+    <section class ="main">
+    </section>
+    <footer>
+        <span>Made with Django</span>
+    </footer>
+</body>
+</html>
