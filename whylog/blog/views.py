@@ -27,3 +27,17 @@ class AlarmViewSet(viewsets.ModelViewSet):
     queryset = Alarm.objects.all()
     serializer_class = AlarmSerializer
 
+def board_client(request):
+    return render(request, 'board_client.html')
+
+def login(request):
+    return render(request, 'login.html')
+
+def board_admin(request):
+    return render(request, 'board_admin.html')
+
+def write(request):
+    return render(request, 'write.html')
+
+def board(request):
+    return render(request, 'board.html')
