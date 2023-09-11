@@ -3,3 +3,6 @@ whylog/whylog/secrets.json
 db.sqlite3
 *.pyc
 whylog/blog/migrations/
+Scripts
+Lib
+pyvenv.cfg
