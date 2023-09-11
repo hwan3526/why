@@ -7,7 +7,7 @@ router.register(r'blog', BlogViewSet)
 router.register(r'user', UserViewSet)
 router.register(r'comment', CommentViewSet)
 router.register(r'like', LikeViewSet)
-router.register(r'alram', AlarmViewSet)
+router.register(r'alarm', AlarmViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
