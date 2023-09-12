@@ -1,3 +1,11 @@
-<footer>
-    <span>Made with Django</span>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}"/>
+
+<footer class="footer">
+    <div class="contianer">
+        <p>
+            Made with <span>Django</span>
+        </p>
+    </div>
 </footer> 
