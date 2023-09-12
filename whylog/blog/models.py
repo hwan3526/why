@@ -10,6 +10,7 @@ class User(models.Model):
     email = models.CharField(max_length=100)
     last_login_date = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)
+    password = models.CharField(max_length=100, default = None)
 
 class Blog(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
