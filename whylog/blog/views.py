@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
+from .forms import BlogForm
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -37,7 +38,9 @@ def board_admin(request):
     return render(request, 'board_admin.html')
 
 def write(request):
-    return render(request, 'write.html')
+    form = BlogForm()
+    return render(request, 'write.html', {'form': form})
+
 
 def board(request):
     return render(request, 'board.html')
