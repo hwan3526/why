@@ -3,8 +3,6 @@ from rest_framework import viewsets
 from .models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
-from .models import Blog, User
-
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -31,23 +29,16 @@ class AlarmViewSet(viewsets.ModelViewSet):
     serializer_class = AlarmSerializer
     
 
-def board_client(request):
-    return render(request, 'board_client.html')
-
-def login(request):
-    return render(request, 'login.html')
-
-def board_admin(request):
-    return render(request, 'board_admin.html')
-
-def write(request):
-    form = BlogForm()
-    return render(request, 'write.html', {'form': form})
-
-
 def board(request):
     return render(request, 'board.html')
 
 def login(request):
     form = UserForm()
     return render(request, 'login.html', {'form': form})
+
+def write(request):
+    form = BlogForm()
+    return render(request, 'write.html', {'form': form})
+
+def board_detail(request):
+    return render(request, 'board-detail.html')

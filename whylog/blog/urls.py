@@ -11,9 +11,8 @@ router.register(r'alarm', AlarmViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('board-client/', board_client, name='board_client'),
-    path('login/', login, name='login'),
-    path('board-admin/', board_admin, name='board_admin'),
-    path('write/', write, name='write'),
     path('board/', board, name='board'),
+    path('login/', login, name='login'),
+    path('write/', write, name='write'),
+    path('board-detail/', board_detail, name='board_detail'),
 ]
