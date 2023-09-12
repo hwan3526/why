@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
-from .forms import BlogForm
+from .forms import BlogForm, UserForm
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -28,19 +28,16 @@ class AlarmViewSet(viewsets.ModelViewSet):
     queryset = Alarm.objects.all()
     serializer_class = AlarmSerializer
 
-def board_client(request):
-    return render(request, 'board_client.html')
+def board(request):
+    return render(request, 'board.html')
 
 def login(request):
-    return render(request, 'login.html')
-
-def board_admin(request):
-    return render(request, 'board_admin.html')
+    form = UserForm()
+    return render(request, 'login.html', {'form': form})
 
 def write(request):
     form = BlogForm()
     return render(request, 'write.html', {'form': form})
 
-
-def board(request):
-    return render(request, 'board.html')
+def board_detail(request):
+    return render(request, 'board-detail.html')
