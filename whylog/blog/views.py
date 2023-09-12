@@ -27,6 +27,7 @@ class LikeViewSet(viewsets.ModelViewSet):
 class AlarmViewSet(viewsets.ModelViewSet):
     queryset = Alarm.objects.all()
     serializer_class = AlarmSerializer
+    
 
 def board(request):
     return render(request, 'board.html')
