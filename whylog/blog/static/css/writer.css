@@ -1,0 +1,9 @@
+textarea{
+    resize: none;
+    height: 500px;
+}
+
+.main {
+    position: relative;
+    top: 104px;
+}
