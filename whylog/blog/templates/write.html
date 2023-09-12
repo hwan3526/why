@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'css.html' %}
+    <title>Document</title>
+</head>
+<body>
+    
+    {% include 'header.html' %}
+
+    <section class ="main">
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.media }}    
+                {{ form.as_p }}
+                <button type="submit">글 작성</button>
+            </form>
+        </div>
+
+        <div>
+            <div>
+                <button>AI 글 자동완성</button>
+            </div>
+            <div>
+                <div>
+                    TOPIC
+                </div>
+                <ul>
+                    <li><a href="">일상</a></li>
+                    <li><a href="">요리</a></li>
+                    <li><a href="">여행</a></li>
+                    <li><a href="">영화</a></li>
+                    <li><a href="">IT/전자기기</a></li>
+                </ul>
+            </div>
+            <div>
+                <div>
+                    UPLOAD INFO
+                </div>
+                <div>
+                    상태: 미발행
+                </div>
+                <input type="button" value="이미지 업로드">
+                <button type="submit">임시저장</button>
+                <button type="submit">글 작성</button>
+            </div>
+        </div>
+    </section>
+
+
+    {% include 'footer.html' %}
+
+</body>
+</html>
