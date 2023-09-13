@@ -5,6 +5,10 @@
     display: flex;
     justify-content: end;
     font-family: 'Pretendard', sans-serif;
+
+    position: fixed;
+    bottom: 0; 
+    left: 0;
 }
 
 
@@ -20,4 +24,15 @@
 
 span{
     font-weight: bold;
+}
+
+.container > p {
+    position: absolute;
+    right: 208px;
+    bottom: 35px;
+    color: #2B2B2B;
+}
+
+.container > span {
+    font-weight: 700;
 }
