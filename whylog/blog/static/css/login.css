@@ -40,6 +40,17 @@ button{
     width: 200px;
 }
 
+button[type="submit"] {
+    background-color: #1e1e1e;
+    color: white;
+    padding: 10px 20px; 
+    border: none; 
+    width: 100%;
+}
+
+button:hover {
+    cursor: pointer;
+}
 
 .box{
     background-color: #fff;
@@ -68,12 +79,4 @@ input {
 
 input:focus{
     outline: none;
-}
-
-button[type="submit"] {
-    background-color: #1e1e1e;
-    color: white;
-    padding: 10px 20px; 
-    border: none; 
-    width: 100%;
 }
