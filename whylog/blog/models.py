@@ -6,7 +6,7 @@ class Category(models.Model):
     category = models.CharField(max_length=50)
 
 class User(models.Model):
-    nickname = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
     email = models.CharField(max_length=100)
     last_login_date = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)
