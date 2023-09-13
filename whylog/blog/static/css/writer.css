@@ -7,6 +7,11 @@ body{
     background-color: #f9f8f4;
 }
 
+a {
+    text-decoration: none;
+    color: #111;
+}
+
 .main {
     position: relative;
     top: 104px;
@@ -22,7 +27,7 @@ body{
     gap: 20px;
 }
 
-label {
+.post-write label {
     display: none;
 }
 
