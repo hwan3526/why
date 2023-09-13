@@ -170,3 +170,15 @@ a{
     height: 100%;
 }
 
+.post-box{
+    display: flex;
+}
+
+.post-tag{
+    color: #7c7c7a;
+}
+
+.post-name{
+    font-weight: 700;
+    margin-left: 10px;
+}
