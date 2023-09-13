@@ -3,7 +3,40 @@ textarea{
     height: 500px;
 }
 
+body{
+    background-color: #f9f8f4;
+}
+
 .main {
     position: relative;
     top: 104px;
+    display: flex;
+    padding-top: 30px;
+    justify-content: center;
+}
+
+.main > form {
+    display: flex;
+    flex-direction: row; 
+    gap: 20px;
+}
+
+label {
+    display: none;
+}
+
+.post-write p {
+    padding-bottom: 10px;
+}
+
+#cke_id_content, #cke_1_bottom {
+    border: none;
+}
+
+#cke_1_top {
+    background-color: #fff;
+}
+
+#cke_1_bottom {
+    display: none;
 }
