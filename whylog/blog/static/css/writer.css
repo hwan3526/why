@@ -58,69 +58,92 @@ a {
 }
 
 aside {
-    gap: 10px;
+    width: 200px;
+}
+
+.ai-auto-write {
     display: flex;
-    flex-direction: column;
+    height: 100px;
+    border: 1px solid #cac8c5;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.topic-wrapper {
+    display: block;
+    border: 1px solid #cac8c5;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    padding: 10px 0px 0px 10px;
+    justify-content: left;
+    height: 200px;
+}
+
+.topic-list {
+    display: block;
+}
+
+.topic-item {
+    display: block;
+    margin-top: 10px;
+}
+
+.topic-item > input {
+    appearance: none;
+    display: inline-flex;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-clip: content-box;
+    border: 1px solid black;
+    background-color: #f9f8f4;
+}
+
+.topic-item > input:checked {
+    background-color: black;
+    padding: 2px;
+    border: 1px solid black;
+  }
+
+.topic-item > label {
+    display: inline-flex;
 }
 
 .box {
-    border-radius: 2px;
-    border: 1px solid #CAC8C5;
-    width: 264px;
-    flex-shrink: 0;
+    display: block;
+    border: 1px solid #cac8c5;
+    border-radius: 3px;
+    padding: 10px 0px 0px 10px;
+    justify-content: left;
+    height: 150px;
+    line-height: 1.5;
 }
 
-.ai-box {
+.save-button-wrapper {
+    display: inline-flex;
+    justify-content: space-evenly;
+}
+
+.temp-save-button {
+    appearance: none;
     display: flex;
-    height: 88px;
-    padding: 16px;
+    width: 90px;
+    border: 1px solid #1e1e1e;
+    border-radius: 3px;
+    background-color: #f9f8f4;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
+    color: #1e1e1e;
 }
 
-.topic-box {
+.save-button {
+    appearance: none;
     display: flex;
-    height: 175px;
-    padding: 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.upload-box {
-    width: 264px;
-    height: 175px;
-    flex-shrink: 0;
-}
-
-.topic > p {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
-.topic-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-
-    color: #000;
-    font-family: Pretendard;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    flex-shrink: 0;
-}
-
-input[type=radio] {
-    width: 17px;
-    height: 17px;
-    stroke-width: 1px;
-    stroke: #000;
+    width: 90px;
+    border: 1px solid #1e1e1e;
+    border-radius: 3px;
+    background-color: #1e1e1e;
+    justify-content: center;
+    color: #f9f8f4;
 }

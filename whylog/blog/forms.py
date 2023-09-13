@@ -7,11 +7,14 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'password']
         widgets = {
             'username': forms.TextInput(attrs={'placeholder': 'username'}),
-            'password': forms.TextInput(attrs={'placeholder': 'password'}),
+            'password': forms.PasswordInput(attrs={'placeholder': 'password'}),
         }
 
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ['title' , 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': '제목'})
+        }
         

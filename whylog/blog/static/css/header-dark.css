@@ -31,19 +31,6 @@
     margin: auto;
 }
 
-a:link {
-  color : #f9f8f4;
-}
-a:visited {
-  color : #f9f8f4;
-}
-a:hover {
-  color : #f9f8f4;
-}
-a:active {
-  color : #f9f8f4
-}
-
 .nav-buttons{
     display: flex;
     align-items: center;
@@ -53,6 +40,19 @@ a:active {
 .nav-topics{
     display: flex;
     gap: 40px;
+}
+
+.nav_item > a:link {
+  color : #f9f8f4;
+}
+.nav_item > a:visited {
+  color : #f9f8f4;
+}
+.nav_item > a:hover {
+  color : #f9f8f4;
+}
+.nav_item > a:active {
+  color : #f9f8f4
 }
 
 button{
