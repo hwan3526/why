@@ -30,7 +30,9 @@ class AlarmViewSet(viewsets.ModelViewSet):
     
 
 def board(request):
-    return render(request, 'board.html')
+    theme = 'dark'
+    return render(request, 'board.html', {'theme': theme})
+
 
 def login(request):
     form = UserForm()
@@ -38,7 +40,33 @@ def login(request):
 
 def write(request):
     form = BlogForm()
-    return render(request, 'write.html', {'form': form})
+    theme = 'light'
+    return render(request, 'write.html', {'form': form, 'theme': theme})
 
 def board_detail(request):
-    return render(request, 'board-detail.html')
+    theme = 'light'
+    return render(request, 'board-detail.html', {'theme': theme})
+
+
+
+# def login(request):
+#     if request.method == 'POST':
+#         form = UserForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             return redirect('board.html')
+#     else:
+#         form = UserForm()
+#         return render(request, 'login.html', {'form': form})
+
+
+# def write(request):
+#     if request.method == "POST":
+#         title = request.POST["title"]
+#         content = request.POST["content"]
+#         Blog.objects.create(title=title, content=content)
+#         user = Blog()
+#         user.save()
+        
+#         return render(request, "write.html")    
