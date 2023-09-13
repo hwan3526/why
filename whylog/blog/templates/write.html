@@ -21,26 +21,39 @@
         <form method="POST">
             <div class="post-write">
                 {% csrf_token %}
-                {{ form.media }}    
+                {{ form.media }}
                 {{ form.as_p }}
             </div>
 
             <aside>
-                <div>
+                <div class="ai-auto-write">
                     <button>AI 글 자동완성</button>
                 </div>
 
-                <div>
-                    <div>
-                        TOPIC
+                <div class="topic-wrapper">
+                    <div class="topic">TOPIC</div>
+                    <div class="topic-list">
+                        <div class="topic-item">
+                            <input type="radio" class="topic" name="topic" value="일상">
+                            <label for="일상">일상</label>
+                        </div>
+                        <div class="topic-item">
+                            <input type="radio" class="topic" name="topic" value="요리">
+                            <label for="요리">요리</label>
+                        </div>
+                        <div class="topic-item">
+                            <input type="radio" class="topic" name="topic" value="여행">
+                            <label for="여행">여행</label>
+                        </div>
+                        <div class="topic-item">
+                            <input type="radio" class="topic" name="topic" value="영화">
+                            <label for="영화">영화</label>
+                        </div>
+                        <div class="topic-item">
+                            <input type="radio" class="topic" name="topic" value="IT/전자기기">
+                            <label for="IT/전자기기">IT/전자기기</label>
+                        </div>
                     </div>
-                    <ul>
-                        <li><a href="">일상</a></li>
-                        <li><a href="">요리</a></li>
-                        <li><a href="">여행</a></li>
-                        <li><a href="">영화</a></li>
-                        <li><a href="">IT/전자기기</a></li>
-                    </ul>
                 </div>
 
                 <div class="box">
@@ -55,8 +68,10 @@
                         <input type="submit" name="delete-button"  class="delete-button" value="삭제"/>
                         <input type="submit" class="save-button" value="수정"/>
                     {% else %}
-                    <input type="submit" name="temp-save-button" class="temp-save-button" value="임시저장" />
-                    <input type="submit" name="save-button" class="save-button" value="글 작성" />
+                    <div class="save-button-wrapper">
+                        <input type="submit" name="temp-save-button" class="temp-save-button" value="임시저장" />
+                        <input type="submit" name="save-button" class="save-button" value="글 작성" />
+                    </div>
                     {% endif %}
                     </div>
                 </div>
