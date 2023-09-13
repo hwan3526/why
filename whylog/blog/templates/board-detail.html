@@ -40,8 +40,8 @@
           </div>
         </div>
       </div>
+      {% if user.is_authenticated %}
       <div class="button-box">
-        {% if user.is_authenticated %}
         <div class="box-divider" style="gap:10px">
           {% comment %} 수정버튼 {% endcomment %}
           <a href="">
@@ -54,10 +54,14 @@
             <button type="submit" class="delete-button">삭제하기</button>
           </form>
         </div>
-        {% endif %}
         {% comment %} 공유버튼 {% endcomment %}
         <button class="share-button">공유하기</button>
       </div>
+      {% else %}
+      <div class="button-box-unauth">
+        <button class="share-button">공유하기</button>
+      </div>
+      {% endif %}
       <!-- 다음글 표시 -->
       {% if next_post %}
       <div class="another-post-box">
