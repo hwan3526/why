@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/post_list.css' %}"/>
+    {% if theme == 'dark' %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
+    {% endif %}
     <title>Document</title>
 </head>
 <body>

@@ -94,6 +94,13 @@ h5{
     justify-content: space-between;
 }
 
+.button-box-unauth{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-end;
+}
+
 .share-button{
     text-decoration: none;
     color: #1e1e1e;
@@ -133,6 +140,10 @@ a{
     display: flex;
 }
 
+.post-tag{
+    color: #7c7c7a;
+}
+
 .post-name{
     font-weight: 700;
     margin-left: 10px;
@@ -168,17 +179,4 @@ a{
     width: 100%;
     object-fit: cover;
     height: 100%;
-}
-
-.post-box{
-    display: flex;
-}
-
-.post-tag{
-    color: #7c7c7a;
-}
-
-.post-name{
-    font-weight: 700;
-    margin-left: 10px;
 }
