@@ -4,9 +4,9 @@ from .models import Blog, User
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['nickname', 'password']
+        fields = ['username', 'password']
         widgets = {
-            'nickname': forms.TextInput(attrs={'placeholder': 'nickname'}),
+            'username': forms.TextInput(attrs={'placeholder': 'username'}),
             'password': forms.TextInput(attrs={'placeholder': 'password'}),
         }
 
