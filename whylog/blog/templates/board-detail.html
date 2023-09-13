@@ -4,10 +4,12 @@
 <html>
   <head>
     <title>{{ post.title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post.css' %}"/>
     {% if theme == 'dark' %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
+      <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
     {% else %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
+      <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
     {% endif %}
 </head>
 <body>
