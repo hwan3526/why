@@ -4,7 +4,11 @@
 <html>
   <head>
     <title>{{ post.title }}</title>
-    {% include 'css.html' %}
+    {% if theme == 'dark' %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
+    {% endif %}
 </head>
 <body>
     {% include 'header.html' %}

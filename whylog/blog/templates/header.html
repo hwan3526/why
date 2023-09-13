@@ -7,7 +7,11 @@
     <nav class="nav-container"> 
         <div class="logo_img">
             <div class="logo-wrap">
-                <img src="{% static 'media/logo.svg' %}">
+                {% if theme == 'dark' %}
+                    <img src="{% static 'media/logo.svg' %}">
+                {% else %}
+                    <img src="{% static 'media/083.svg' %}">
+                {% endif %}
                 <div class="logo-text">
                     <h1 class="logo_text">MYLOG</h1>
                 </div>
