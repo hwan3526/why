@@ -13,6 +13,7 @@ body{
     display: flex;
     padding-top: 30px;
     justify-content: center;
+    margin-bottom: 400px;
 }
 
 .main > form {
@@ -39,4 +40,14 @@ label {
 
 #cke_1_bottom {
     display: none;
+}
+
+.post-write input {
+    display: flex;
+    padding: 10px;
+    align-items: flex-start;
+    gap: 10px;
+    border: none;
+
+    width: 480px;
 }
