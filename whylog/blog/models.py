@@ -44,6 +44,9 @@ class Alarm(models.Model):
 
 
 
+class Time(models.Model):
+    created_at = models.DateTimeField(auto_now_add = True) # 생성 시간 
+    updated_at = models.DateTimeField(auto_now = True)  # 수정 시간 
 
 
 
