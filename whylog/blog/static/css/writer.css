@@ -47,6 +47,10 @@ a {
     display: none;
 }
 
+#cke_28 {
+    display: none;
+}
+
 .post-write input {
     display: flex;
     padding: 10px;

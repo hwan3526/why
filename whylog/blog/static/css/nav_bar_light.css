@@ -30,19 +30,6 @@
     margin: auto;
 }
 
-a:link {
-  color : #1e1e1e;
-}
-a:visited {
-  color : #1e1e1e;
-}
-a:hover {
-  color : #1e1e1e;
-}
-a:active {
-  color : #1e1e1e
-}
-
 .nav-buttons{
     display: flex;
     align-items: center;
@@ -52,6 +39,19 @@ a:active {
 .nav-topics{
     display: flex;
     gap: 40px;
+}
+
+.nav-item > a:link {
+  color : #1e1e1e;
+}
+.nav-item > a:visited {
+  color : #1e1e1e;
+}
+.nav-item > a:hover {
+  color : #1e1e1e;
+}
+.nav-item > a:active {
+  color : #1e1e1e
 }
 
 button{
@@ -73,7 +73,7 @@ button:hover{
   
   padding: 10px 25px;
 
-  color: #F9F8F4;
+  color: #f9f8f4;
   text-align: center;
   font-family: Noto Sans KR;
   font-size: 13px;
@@ -89,11 +89,31 @@ button:hover{
   cursor: pointer;
 }
 
-.logout-button:hover{
-  color: rgb(255, 162, 162);
-  transition: transform 0.8s,  color 0.3s;
+.logout-button {
+  display: inline-block;
+  background-color: #f9f8f4;
+  border-radius: 2px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  
+  padding: 10px 25px;
+
+  color: #1e1e1e;
+  text-align: center;
+  font-family: Noto Sans KR;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
+.logout-button:hover{
+  background-color: #696969;
+  transition: transform 0.8s,  background-color 0.3s;
+  color: #f9f8f4;
+  cursor: pointer;
+}
 
 .row-box{
   display: flex;
@@ -112,7 +132,7 @@ button:hover{
   vertical-align: middle;
 }
 
-.logo-text {
+#logo-text {
   position: absolute;
   top: 50%;
   left: 50%;

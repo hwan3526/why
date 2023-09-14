@@ -42,16 +42,16 @@
     gap: 40px;
 }
 
-.nav_item > a:link {
+.nav-item > a:link {
   color : #f9f8f4;
 }
-.nav_item > a:visited {
+.nav-item > a:visited {
   color : #f9f8f4;
 }
-.nav_item > a:hover {
+.nav-item > a:hover {
   color : #f9f8f4;
 }
-.nav_item > a:active {
+.nav-item > a:active {
   color : #f9f8f4
 }
 
@@ -74,7 +74,7 @@ button:hover{
   
   padding: 10px 25px;
 
-  color: #1E1E1E;
+  color: #1e1e1e;
   text-align: center;
   font-family: Noto Sans KR;
   font-size: 13px;
@@ -86,13 +86,34 @@ button:hover{
 .primary-button:hover {
   background-color: #696969;
   transition: transform 0.8s,  background-color 0.3s;
-  color: #ffffff;
+  color: #f9f8f4;
   cursor: pointer;
 }
+
+.logout-button {
+  display: inline-block;
+  background-color: #1e1e1e;
+  border-radius: 2px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
   
+  padding: 10px 25px;
+
+  color: #f9f8f4;
+  text-align: center;
+  font-family: Noto Sans KR;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
 .logout-button:hover{
-  color: rgb(255, 162, 162);
-  transition: transform 0.8s,  color 0.3s;
+  background-color: #696969;
+  transition: transform 0.8s,  background-color 0.3s;
+  color: #1e1e1e;
+  cursor: pointer;
 }
 
 .row-box{
@@ -112,7 +133,7 @@ button:hover{
   vertical-align: middle;
 }
 
-.logo-text {
+#logo-text {
   position: absolute;
   top: 50%;
   left: 50%;
