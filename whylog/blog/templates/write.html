@@ -12,17 +12,64 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
     {% endif %}
     <title>Write</title>
+    <script src="https://cdn.tiny.cloud/1/cig4n9ujjp5wqsgk6jqk8pcfi03mazpxf0hb3h3tz9129744/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+      tinymce.init({
+        selector: '#content',
+        images_upload_url: '{% url "image_upload" %}',
+      });
+
+      document.addEventListener('DOMContentLoaded', (event) => {
+        // 이미지 업로드 후 에디터 내에 이미지 삽입
+        document.getElementById('imageUpload').addEventListener('change', function() {
+        let formData = new FormData();
+        formData.append('file', this.files[0]);
+
+        fetch('{% url "image_upload" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            tinyMCE.activeEditor.insertContent(`<img src="${data.location}"/>`);
+        })
+        .catch(error => console.error('Error:', error));
+        });
+    });
+
+    </script>   
+    
 </head>
 <body>
     
     {% include 'header.html' %}
 
     <section class ="main">
-        <form method="POST">
+        <form method="POST" action="{% if edit_mode %}{% url 'write' post.id %}{% else %}{% url 'write' %}{% endif %}" enctype="multipart/form-data">
             <div class="post-write">
                 {% csrf_token %}
                 {{ form.media }}
-                {{ form.as_p }}
+                <div class="write-box">
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      class="title"
+                      placeholder="제목"
+                      value="{{ post.title }}"
+                    />
+                    
+                    <textarea
+                      id="content"
+                      name="content"
+                    >{{ post.content}}</textarea>
+        
+                  </div>
+
             </div>
 
             <aside>
