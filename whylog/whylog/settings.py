@@ -42,9 +42,6 @@ INSTALLED_APPS = [
 
     'blog',
     'rest_framework',
-    # 'ckeditor',
-    # 'ckeditor_uploader',
-
     'tinymce',
 ]
 
@@ -137,18 +134,11 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# CKEDITOR_UPLOAD_PATH = 'uploads/'
-# CKEDITOR_IMAGE_BACKEND = "pillow" 
-# CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'blog/', STATIC_URL, 'media')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media/'
-# CKEDITOR_CONFIGS={
-#   'default': {
-#     'toolbar': 'Full',
-#     'height': 400,
-#     'width': 500,
-#   },
-# }
+
 LOGOUT_REDIRECT_URL = '/'
 
 
