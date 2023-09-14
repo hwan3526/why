@@ -1,7 +1,8 @@
 from django import forms
 from .models import Blog, User
+from django.contrib.auth.forms import AuthenticationForm
 
-class UserForm(forms.ModelForm):
+class UserForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
