@@ -20,12 +20,12 @@
         {% comment %} 본문영역 {% endcomment %}
         <div class="big-box">
           <div class="post-info">
-            <h5>0000.00.00 | 123 조회</h5>
-            <h1>title</h1>
-            <h5>by author_id</h5>
+            <h5>{{ blog.upload_date | date:'Y m d'}} | {{ blog.count }} 조회</h5>
+            <h1>{{ blog.title }}</h1>
+            <h5>{{ blog.user.username }}</h5>
             <h5 class="topic-box">topic</h5>
           </div>
-          <div class="post-content">content</div>
+          <div class="post-content">{{ blog.content | safe }}</div>
         </div>
         {% comment %} 추천글 영역 {% endcomment %}
         <div class="small-box">
