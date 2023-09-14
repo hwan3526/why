@@ -64,15 +64,15 @@
                     <button type="button" class="button-line" onclick="document.getElementById('imageUpload').click();">이미지 업로드</button>
                     </div>
                     <div class="save-box">
-                    {% if edit_mode %}
-                        <input type="submit" name="delete-button"  class="delete-button" value="삭제"/>
-                        <input type="submit" class="save-button" value="수정"/>
-                    {% else %}
-                    <div class="save-button-wrapper">
-                        <input type="submit" name="temp-save-button" class="temp-save-button" value="임시저장" />
-                        <input type="submit" name="save-button" class="save-button" value="글 작성" />
-                    </div>
-                    {% endif %}
+                        <div class="save-button-wrapper">
+                        {% if edit_mode %}
+                            <input type="submit" name="delete-button"  class="delete-button" value="삭제"/>
+                            <input type="submit" class="save-button" value="수정"/>
+                        {% else %}
+                            <input type="submit" name="temp-save-button" class="temp-save-button" value="임시저장" />
+                            <input type="submit" name="save-button" class="save-button" value="글 작성" />
+                        {% endif %}
+                        </div>
                     </div>
                 </div>
             </aside>
