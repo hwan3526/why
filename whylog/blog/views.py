@@ -48,6 +48,8 @@ def extract_image_src(html_content):
 def board(request, category_id=None):
     theme = 'dark'
     is_logined = False
+    topics = Category.objects.all()
+
     if category_id:
         posts = Blog.objects.filter(category_id=category_id, temporary=False).order_by('-upload_date', '-count')
         first_post = posts[0] if posts else None
@@ -68,7 +70,8 @@ def board(request, category_id=None):
         "is_logined": is_logined, 
         'first_post': first_post, 
         'posts': posts[1:], 
-        'img': first_img
+        'img': first_img,
+        'topics' : topics
     }
 
     return render(request, 'board.html', context)
@@ -99,6 +102,7 @@ def logout(request):
 
 def write(request, blog_id=None):
     theme = 'light'
+    topics = Category.objects.all()
 
     if blog_id:
         blog = get_object_or_404(Blog, id=blog_id)
@@ -126,9 +130,11 @@ def write(request, blog_id=None):
             else:
                 blog.temporary = False
 
+            print(request)
+
             temporary = blog.temporary
             count = 0
-            category_id = 1
+            category_id = request.POST['topic']
             user_id_id = request.user.id
 
             if blog.id:
@@ -145,6 +151,7 @@ def write(request, blog_id=None):
         'post': blog, 
         'edit_mode': blog_id is not None, 
         'MEDIA_URL': settings.MEDIA_URL,
+        'topics' : topics,
     } 
 
     return render(request, 'write.html', context)
