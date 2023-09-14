@@ -130,9 +130,11 @@ h5{
 
 a{
     text-decoration: none;
-    display: flex;
 }
 
+body > a {
+    display: flex;
+}
 
 .another-post-box{
     display: flex;
