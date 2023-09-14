@@ -1,6 +1,8 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from tinymce.models import HTMLField 
+
 
 class Category(models.Model):
     category = models.CharField(max_length=50)
@@ -15,7 +17,8 @@ class User(models.Model):
 class Blog(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = RichTextUploadingField(blank=True,null=True)
+    # content = RichTextUploadingField(blank=True,null=True)
+    content = HTMLField(blank=True,null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     blog_img = models.TextField()
     in_private = models.BooleanField()
