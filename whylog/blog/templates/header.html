@@ -23,17 +23,18 @@
                 <li class="nav-item"><a href="">IT</a></li>
                 {% comment %} <li class="nav-buttons"> {% endcomment %}
                 {% if user.is_authenticated %}
-                <li class="nav-item"><a href="/logout">Logout</a></li>
+                {% comment %} <li class="nav-item">
+                    <a class="logout-button" href="/logout">Logout</a>
+                </li> {% endcomment %}
                 {% endif %}
                 </li>
             </ul>
-            <div class="primary-button">
-                {% if user.is_authenticated %}
-                <button onclick="location.href='/write'">Just Write!</button>
-                {% else %}
-                <button onclick="location.href='/login'">Login</button>
-                {% endif %}
-            </div>
+            {% if user.is_authenticated %}
+                <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+                <button class="primary-button" onclick="location.href='/write'">Just Write!</button>
+            {% else %}
+                <button class="primary-button" onclick="location.href='/login'">Login</button>
+            {% endif %}
         </div>
     </nav>
 </header>
