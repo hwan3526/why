@@ -25,10 +25,8 @@
                 {% if user.is_authenticated %}
                 <li class="nav-item"><a href="/logout">Logout</a></li>
                 {% endif %}
-
                 </li>
             </ul>
-            {% if not user.is_authenticated %}
             <div class="primary-button">
                 {% if user.is_authenticated %}
                 <button onclick="location.href='/write'">Just Write!</button>
@@ -36,14 +34,6 @@
                 <button onclick="location.href='/login'">Login</button>
                 {% endif %}
             </div>
-            {% else %}
-            <div class="logout-button">
-                <button>Logout</button>
-            </div>
-            <div class="primary-button">
-                <button>Just Write!</button>
-            </div>
-            {% endif %}
         </div>
     </nav>
 </header>
