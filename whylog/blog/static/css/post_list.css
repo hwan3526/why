@@ -120,10 +120,11 @@ body{
 }
 
 .card{
-    width: calc((100% - (2 * 38px)) / 3); 
+    width: calc((100% - (2 * 54px) - 16px) / 3);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    padding: 8px;
 }
 
 .card:hover {
