@@ -82,26 +82,13 @@
                 <div class="topic-wrapper">
                     <div class="topic">TOPIC</div>
                     <div class="topic-list">
-                        <div class="topic-item">
-                            <input type="radio" class="topic" name="topic" value="일상">
-                            <label for="일상">일상</label>
-                        </div>
-                        <div class="topic-item">
-                            <input type="radio" class="topic" name="topic" value="요리">
-                            <label for="요리">요리</label>
-                        </div>
-                        <div class="topic-item">
-                            <input type="radio" class="topic" name="topic" value="여행">
-                            <label for="여행">여행</label>
-                        </div>
-                        <div class="topic-item">
-                            <input type="radio" class="topic" name="topic" value="영화">
-                            <label for="영화">영화</label>
-                        </div>
-                        <div class="topic-item">
-                            <input type="radio" class="topic" name="topic" value="IT/전자기기">
-                            <label for="IT/전자기기">IT/전자기기</label>
-                        </div>
+
+                        {% for topic in topics %}                            
+                            <div class="topic-item">
+                                <input type="radio" class="topic" name="topic" value="{{ topic.id }}">
+                                <label for="{{ topic.category }}">{{ topic.category }}</label>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 
