@@ -38,20 +38,21 @@
         <main class="post-box">
             <div class="container">
     
+                {% for blog in blogs %}
                 <div class="card">
                     <div class="card-thumbnail-img">
                         <img>
                     </div>
     
                     <div class="card-info-box">
-                        <p>0000-00-00</p>
-                        <h3>title</h3>
+                        <p>{{ blog.upload_date | date:'Y-m-d H:i:s' }}</p>
+                        <h3>{{ blog.title }}</h3>
                         <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id a placeat in sequi libero nesciunt dignissimos, architecto rem molestias sint magni neque error minus mollitia tempora eum, dolor doloribus soluta?
+                            {{ blog.content | striptags | linebreaksbr }}
                         </p>
                     </div>
                 </div>
-    
+                {% endfor %}
             </div>
         </main>
 
