@@ -13,7 +13,7 @@ router.register(r'alarm', AlarmViewSet)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('', board, name='board'),
-    path('board/', board, name='board'),
+    path('board/<int:category_id>', board, name='board'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('write/', write, name='write'),
