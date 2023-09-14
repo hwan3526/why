@@ -51,10 +51,10 @@ def board(request, category_id=None):
     topics = Category.objects.all()
 
     if category_id:
-        posts = Blog.objects.filter(category_id=category_id, temporary=False).order_by('-upload_date', '-count')
+        posts = Blog.objects.filter(category_id=category_id, temporary=False).order_by('-upload_date__date', '-count')
         first_post = posts[0] if posts else None
     else:
-        posts = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
+        posts = Blog.objects.filter(temporary=False).order_by('-upload_date__date', '-count')
         first_post = posts[0] if posts else None
 
     for post in posts:
