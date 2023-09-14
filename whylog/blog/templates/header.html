@@ -16,11 +16,10 @@
         </div>
         <div class="row-box">
             <ul class="nav-topics">
-                <li class="nav-item"><a href="">일상</a></li>
-                <li class="nav-item"><a href="">요리</a></li>
-                <li class="nav-item"><a href="">여행</a></li>
-                <li class="nav-item"><a href="">영화</a></li>
-                <li class="nav-item"><a href="">IT</a></li>
+                {% for topic in topics %}
+                    <li class="nav-item"><a href="{% url 'board' topic.id %}">{{ topic.category }}</a></li>
+                {% endfor %}
+                
                 {% comment %} <li class="nav-buttons"> {% endcomment %}
                 {% if user.is_authenticated %}
                 {% comment %} <li class="nav-item">
