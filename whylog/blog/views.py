@@ -41,10 +41,10 @@ def board(request, topic=None):
     is_logined = False
     if topic:
         posts = Blog.objects.filter(Category=topic, temporary=False).order_by('-upload_date', '-count')
-        first_post = posts[0]
+        first_post = posts[0] if posts else None
     else:
         posts = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
-        first_post = posts[0]
+        first_post = posts[0] if posts else None
     return render(request, 'board.html', {'theme': theme, "is_logined": is_logined, 'first_post': first_post, 'posts': posts[1:]})
 
 def board_view(request):
@@ -77,38 +77,54 @@ def update_blog(request, blog_id):
     else:
         blog = Blog.objects.filter(user_id=request.user.id, temporary=False).order_by('-upload_date').first()
 
-def write(request):
+def write(request, blog_id=None):
     theme = 'light'
 
+    if blog_id:
+        blog = get_object_or_404(Blog, id=blog_id)
+    else:
+        blog = Blog.objects.filter(user_id=request.user.id, temporary=True).order_by('-upload_date').first()
+
     if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES)
+        form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid():
             blog = form.save(commit=False)
+
+            if 'delete-button' in request.POST:
+                blog.delete() 
+                return redirect('blog_app:post_list') 
+
             blog.user = request.user.id
             title = request.POST['title']
             content = request.POST['content']
             in_private = False
+
+            temporary = False
             
             if 'temp-save-button' in request.POST:
-                temporary = True
+                blog.temporary = True
             else:
-                temporary = False
+                blog.temporary = False
 
+            temporary = blog.temporary
             count = 0
             category_id = 1
             user_id_id = request.user.id
-            blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
-            blog.save()
+
+            if blog.id:
+                blog.save()
+            else:
+                blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
-        form = BlogForm()
+        form = BlogForm(instance=blog)
 
     context = {
         'theme': theme,
         'form': form,  
-        # 'blog': blog, 
-        # 'edit_mode': blog_id is not None, 
-        # 'MEDIA_URL': settings.MEDIA_URL,
+        'post': blog, 
+        'edit_mode': blog_id is not None, 
+        'MEDIA_URL': settings.MEDIA_URL,
     } 
 
     return render(request, 'write.html', context)
@@ -116,6 +132,11 @@ def write(request):
 def board_detail(request, blog_id=None):
     theme = 'light'
     blog = get_object_or_404(Blog, pk=blog_id)
+
+    if request.method == 'POST': 
+        if 'delete-button' in request.POST:
+            blog.delete()
+            return redirect('board')
 
     blog.count += 1
     blog.save()
@@ -141,7 +162,7 @@ def board_detail(request, blog_id=None):
 
     return render(request, 'board-detail.html', context)
 
-def image_upload(View):
+class image_upload(View):
     def post(self, request):
         file = request.FILES['file']
         filepath = 'uploads/' + file.name
