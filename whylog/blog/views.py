@@ -33,9 +33,18 @@ class LikeViewSet(viewsets.ModelViewSet):
 
 class AlarmViewSet(viewsets.ModelViewSet):
     queryset = Alarm.objects.all()
-    serializer_class = AlarmSerializer
+    serializer_class = AlarmSerializer 
 
+def extract_image_src(html_content):
+    soup = BeautifulSoup(html_content, 'html.parser')
+    image_tag = soup.find('img')
     
+    if image_tag:
+        src_attribute = image_tag.get('src', '')
+        return src_attribute
+    else:
+        return ''
+
 def board(request, topic=None):
     theme = 'dark'
     is_logined = False
@@ -45,7 +54,19 @@ def board(request, topic=None):
     else:
         posts = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
         first_post = posts[0] if posts else None
-    return render(request, 'board.html', {'theme': theme, "is_logined": is_logined, 'first_post': first_post, 'posts': posts[1:]})
+
+    for post in posts:
+        post.image_tag = extract_image_src(post.content)
+
+    context = {
+        'theme': theme, 
+        "is_logined": is_logined, 
+        'first_post': first_post, 
+        'posts': posts[1:], 
+        'img': extract_image_src(first_post.content)
+    }
+
+    return render(request, 'board.html', context)
 
 def board_view(request):
     return redirect('board')
@@ -70,12 +91,6 @@ def login(request):
 def logout(request):
     logout(request)
     return render(request, "board.html", {"is_logined": False})
-
-def update_blog(request, blog_id):
-    if blog_id:
-        blog = get_object_or_404(Blog, id=blog_id)
-    else:
-        blog = Blog.objects.filter(user_id=request.user.id, temporary=False).order_by('-upload_date').first()
 
 def write(request, blog_id=None):
     theme = 'light'
@@ -147,9 +162,7 @@ def board_detail(request, blog_id=None):
     recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False).exclude(id=blog.id).order_by('-upload_date')[:2]
 
     for recommended_blog in recommended_blogs:
-        soup = BeautifulSoup(recommended_blog.content, 'html.parser')
-        image_tag = soup.find('img')
-        recommended_blog.image_tag = str(image_tag) if image_tag else ''
+        recommended_blog.image_tag = extract_image_src(recommended_blog.content)
     
     context = {
         'theme': theme, 
@@ -169,3 +182,4 @@ class image_upload(View):
         filename = default_storage.save(filepath, file)
         file_url = settings.MEDIA_URL + filename
         return JsonResponse({'location': file_url})
+    
