@@ -88,7 +88,12 @@ def write(request):
             title = request.POST['title']
             content = request.POST['content']
             in_private = False
-            temporary = False
+            
+            if 'temp-save-button' in request.POST:
+                temporary = True
+            else:
+                temporary = False
+
             count = 0
             category_id = 1
             user_id_id = request.user.id
