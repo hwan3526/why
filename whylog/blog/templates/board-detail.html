@@ -1,16 +1,17 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ post.title }}</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/post.css' %}"/>
     {% if theme == 'dark' %}
-      <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header-dark.css' %}"/>
     {% else %}
-      <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
     {% endif %}
+    <title>WHYLOG - {{ blog.title }}</title>
 </head>
 <body>
     {% include 'header.html' %}
@@ -23,7 +24,7 @@
             <h5>{{ blog.upload_date | date:'Y m d'}} | {{ blog.count }} 조회</h5>
             <h1>{{ blog.title }}</h1>
             <h5>{{ blog.user.username }}</h5>
-            <h5 class="topic-box">topic</h5>
+            <h5 class="topic-box">{{ blog.category_id }}</h5>
           </div>
           <div class="post-content">{{ blog.content | safe }}</div>
         </div>
@@ -85,7 +86,7 @@
         <div class="post-box">
           <div class="post-tag">이전글</div>
           <div class="post-name">
-            <a href="">{{ previous_post.title }}</a>
+            <a href="{% url previous_post.id %}">{{ previous_post.title }}</a>
           </div>
         </div>
         <p>{{ previous_post.created_at }}</p>
