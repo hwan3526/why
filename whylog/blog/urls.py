@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('write/', write, name='write'),
     path('board-detail/<int:blog_id>', board_detail, name='board_detail'),
+    path('image-upload/', image_upload, name='image_upload'),
 
     path('accounts/profile/', board_view, name='board_view'),
 ]
