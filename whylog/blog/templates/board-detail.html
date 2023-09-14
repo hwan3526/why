@@ -47,11 +47,11 @@
       <div class="button-box">
         <div class="box-divider" style="gap:10px">
           {% comment %} 수정버튼 {% endcomment %}
-          <a href="{% url 'write' %}">
+          <a href="{% url 'write' blog.id %}">
             <button class="edit-button">수정하기</button>
           </a>
           {% comment %} 삭제버튼 {% endcomment %}
-          <form method="POST" action="{% url 'board-detail' blog.id %}">
+          <form method="POST" action="{% url 'board_detail' blog.id %}">
             {% csrf_token %}
             <input type="hidden" name="delete-button" value="true">
             <button type="submit" class="delete-button">삭제하기</button>
