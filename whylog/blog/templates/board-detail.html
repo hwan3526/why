@@ -86,7 +86,7 @@
         <div class="post-box">
           <div class="post-tag">이전글</div>
           <div class="post-name">
-            <a href="{% url previous_post.id %}">{{ previous_post.title }}</a>
+            <a href="{% url 'board_detail' previous_post.id %}">{{ previous_post.title }}</a>
           </div>
         </div>
         <p>{{ previous_post.created_at }}</p>
