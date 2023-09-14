@@ -21,35 +21,34 @@
 
         <section class ="first-post-box">
             <div class="container">
-                
                 <div class="post-info-box">
-                    <h3>title</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere voluptas alias sapiente fugiat repellendus et, unde culpa tenetur aut possimus modi explicabo molestiae asperiores ratione nihil, cumque natus aperiam debitis.</p>
-                    <button>READ MORE</button>
+                    <a href="/board-detail/{{first_post.id}}">
+                        <h3>{{first_post.title}}</h3>
+                        <p>{{first_post.content}}</p>
+                    </a>
+                    <button onclick="location.href='/board-detail/{{first_post.id}}'">READ MORE</button>
                 </div>
-                
                 <div class="thumbnail-img">
-                    <img>
+                    <img href="/board-detail/{{first_post.id}}">
                 </div>
-
             </div>
         </section>
 
         <main class="post-box">
             <div class="container">
     
-                {% for blog in blogs %}
+                {% for post in posts %}
                 <div class="card">
-                    <a href="/board-detail/{{blog.id}}">
+                    <a href="/board-detail/{{post.id}}">
                         <div class="card-thumbnail-img">
                             <img>
                         </div>
         
                         <div class="card-info-box">
-                            <p>{{ blog.upload_date | date:'Y-m-d H:i:s' }}</p>
-                            <h3>{{ blog.title }}</h3>
+                            <p>{{ post.upload_date | date:'Y-m-d H:i:s' }}</p>
+                            <h3>{{ post.title }}</h3>
                             <p>
-                                {{ blog.content | striptags | linebreaksbr }}
+                                {{ post.content | striptags | linebreaksbr }}
                             </p>
                         </div>
                     </a>
