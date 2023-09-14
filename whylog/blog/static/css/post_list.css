@@ -28,12 +28,26 @@ body{
     font-size: 48px;
     font-weight: 700;
     margin: 0;
+    overflow: hidden;
+    word-break: break-word;
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
 }
 
 .first-post-box p{
     font-weight: 300;
     margin-bottom: 10px;
     line-height: 25px;
+    overflow: hidden;
+    word-break: break-word;
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
 }
 
 .first-post-box .container{
@@ -143,21 +157,35 @@ body{
   font-family: 'Pretendard', sans-serif;
 }
 
-
 h3 {
     font-family: 'Pretendard', sans-serif;
-  font-size: 20px;
-  margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
+
 .card-info-box h3{
     font-size: 20px;
     font-weight: 700;
+    overflow: hidden;
+    word-break: break-word;
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical
 }
 
 .card-info-box p {
     font-size: 14px;
     margin-bottom: 8px;
     line-height: 25px;
+    overflow: hidden;
+    word-break: break-word;
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical
 }
 
 .sub-info {
