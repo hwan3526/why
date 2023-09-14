@@ -4,9 +4,12 @@ from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
 from django.contrib.auth import login, logout, authenticate
+from django.conf import settings
+from django.views import View
+from django.core.files.storage import default_storage
+from django.http import JsonResponse
 
 from bs4 import BeautifulSoup
-from django.conf import settings
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -37,10 +40,12 @@ def board(request, topic=None):
     theme = 'dark'
     is_logined = False
     if topic:
-        blog = Blog.objects.filter(Category=topic, temporary=False).order_by('-upload_date', '-count')
+        posts = Blog.objects.filter(Category=topic, temporary=False).order_by('-upload_date', '-count')
+        first_post = posts[0]
     else:
-        blog = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
-    return render(request, 'board.html', {'theme': theme, "is_logined": is_logined, 'blogs': blog})
+        posts = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
+        first_post = posts[0]
+    return render(request, 'board.html', {'theme': theme, "is_logined": is_logined, 'first_post': first_post, 'posts': posts[1:]})
 
 def board_view(request):
     return redirect('board')
@@ -66,6 +71,12 @@ def logout(request):
     logout(request)
     return render(request, "board.html", {"is_logined": False})
 
+def update_blog(request, blog_id):
+    if blog_id:
+        blog = get_object_or_404(Blog, id=blog_id)
+    else:
+        blog = Blog.objects.filter(user_id=request.user.id, temporary=False).order_by('-upload_date').first()
+
 def write(request):
     theme = 'light'
 
@@ -86,9 +97,18 @@ def write(request):
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm()
-    return render(request, 'write.html', {'form': form, 'theme': theme})
 
-def board_detail(request, blog_id):
+    context = {
+        'theme': theme,
+        'form': form,  
+        # 'blog': blog, 
+        # 'edit_mode': blog_id is not None, 
+        # 'MEDIA_URL': settings.MEDIA_URL,
+    } 
+
+    return render(request, 'write.html', context)
+
+def board_detail(request, blog_id=None):
     theme = 'light'
     blog = get_object_or_404(Blog, pk=blog_id)
 
@@ -115,3 +135,11 @@ def board_detail(request, blog_id):
     }
 
     return render(request, 'board-detail.html', context)
+
+def image_upload(View):
+    def post(self, request):
+        file = request.FILES['file']
+        filepath = 'uploads/' + file.name
+        filename = default_storage.save(filepath, file)
+        file_url = settings.MEDIA_URL + filename
+        return JsonResponse({'location': file_url})
