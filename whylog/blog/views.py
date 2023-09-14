@@ -159,6 +159,7 @@ def write(request, blog_id=None):
 def board_detail(request, blog_id=None):
     theme = 'light'
     blog = get_object_or_404(Blog, pk=blog_id)
+    topics = Category.objects.all()
 
     if request.method == 'POST': 
         if 'delete-button' in request.POST:
@@ -183,6 +184,7 @@ def board_detail(request, blog_id=None):
         'next_post': next_blog,
         'recommended_posts': recommended_blogs,
         'MEDIA_URL': settings.MEDIA_URL,
+        'topics' : topics,
     }
 
     return render(request, 'board-detail.html', context)
