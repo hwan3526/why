@@ -5,6 +5,9 @@ from .serializers import *
 from .forms import BlogForm, UserForm
 from django.contrib.auth import login, logout, authenticate
 
+from bs4 import BeautifulSoup
+from django.conf import settings
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -30,10 +33,13 @@ class AlarmViewSet(viewsets.ModelViewSet):
     serializer_class = AlarmSerializer
 
     
-def board(request):
+def board(request, topic=None):
     theme = 'dark'
     is_logined = False
-    blog = Blog.objects.all()
+    if topic:
+        blog = Blog.objects.filter(Category=topic, temporary=False).order_by('-upload_date', '-count')
+    else:
+        blog = Blog.objects.filter(temporary=False).order_by('-upload_date', '-count')
     return render(request, 'board.html', {'theme': theme, "is_logined": is_logined, 'blogs': blog})
 
 def board_view(request):
@@ -55,15 +61,10 @@ def login(request):
                     login(request, user)
                     return redirect('blog:board')
         return render(request, 'board.html', {'form': form, "is_logined":is_logined})
-    # return render(request, 'board.html', {"is_logined":is_logined})
 
 def logout(request):
     logout(request)
     return render(request, "board.html", {"is_logined": False})
-
-# def login(request):
-#     form = UserForm()
-#     return render(request, 'login.html', {'form': form})
 
 def write(request):
     theme = 'light'
@@ -90,26 +91,27 @@ def write(request):
 def board_detail(request, blog_id):
     theme = 'light'
     blog = get_object_or_404(Blog, pk=blog_id)
-    return render(request, 'board-detail.html', {'theme': theme, 'blog': blog})
 
-# def login(request):
-#     if request.method == 'POST':
-#         form = UserForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect('board.html')
-#     else:
-#         form = UserForm()
-#         return render(request, 'login.html', {'form': form})
+    blog.count += 1
+    blog.save()
 
+    prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
+    next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
 
-# def write(request):
-#     if request.method == "POST":
-#         title = request.POST["title"]
-#         content = request.POST["content"]
-#         Blog.objects.create(title=title, content=content)
-#         user = Blog()
-#         user.save()
-        
-#         return render(request, "write.html")    
+    recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False).exclude(id=blog.id).order_by('-upload_date')[:2]
+
+    for recommended_blog in recommended_blogs:
+        soup = BeautifulSoup(recommended_blog.content, 'html.parser')
+        image_tag = soup.find('img')
+        recommended_blog.image_tag = str(image_tag) if image_tag else ''
+    
+    context = {
+        'theme': theme, 
+        'blog': blog,
+        'previous_post': prev_blog,
+        'next_post': next_blog,
+        'recommended_posts': recommended_blogs,
+        'MEDIA_URL': settings.MEDIA_URL,
+    }
+
+    return render(request, 'board-detail.html', context)

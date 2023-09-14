@@ -9,8 +9,8 @@
                 {% else %}
                     <img src="{% static 'media/083.svg' %}">
                 {% endif %}
-                <div class="logo-text">
-                    <h1 class="logo_text">MYLOG</h1>
+                <div>
+                    <a id="logo-text" href="/">WHYLOG</a>
                 </div>
             </div>
         </div>
@@ -21,12 +21,20 @@
                 <li class="nav-item"><a href="">여행</a></li>
                 <li class="nav-item"><a href="">영화</a></li>
                 <li class="nav-item"><a href="">IT</a></li>
-                <li class="nav-buttons">
+                {% comment %} <li class="nav-buttons"> {% endcomment %}
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a href="/logout">Logout</a></li>
+                {% endif %}
+
                 </li>
             </ul>
             {% if not user.is_authenticated %}
             <div class="primary-button">
-                <button>Login</button>
+                {% if user.is_authenticated %}
+                <button onclick="location.href='/write'">Just Write!</button>
+                {% else %}
+                <button onclick="location.href='/login'">Login</button>
+                {% endif %}
             </div>
             {% else %}
             <div class="logout-button">
