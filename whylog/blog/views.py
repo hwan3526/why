@@ -4,10 +4,12 @@ from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
 from django.views import View
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from bs4 import BeautifulSoup
 
@@ -79,11 +81,22 @@ def board(request, category_id=None):
 def board_view(request):
     return redirect('board')
 
-def login(request):
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('board')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {"form": form})
+
+def user_login(request):
     is_logined = True
 
     if request.user.is_authenticated:
-        return redirect('blog:board')
+        return redirect('board')
     else:
         form = UserForm(data=request.POST or None)
         if request.method == "POST":
@@ -93,13 +106,14 @@ def login(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return redirect('blog:board')
+                    return redirect('board')
         return render(request, 'board.html', {'form': form, "is_logined":is_logined})
 
 def logout(request):
     logout(request)
     return render(request, "board.html", {"is_logined": False})
 
+@login_required(login_url='login')
 def write(request, blog_id=None):
     theme = 'light'
     topics = Category.objects.all()
@@ -116,9 +130,9 @@ def write(request, blog_id=None):
 
             if 'delete-button' in request.POST:
                 blog.delete() 
-                return redirect('blog_app:post_list') 
+                return redirect('board') 
 
-            blog.user = request.user.id
+            # blog.user = request.user.id
             title = request.POST['title']
             content = request.POST['content']
             in_private = False
@@ -135,12 +149,14 @@ def write(request, blog_id=None):
             temporary = blog.temporary
             count = 0
             category_id = request.POST['topic']
-            user_id_id = request.user.id
+            # user_id_id = request.user.id
+            user_id = request.user.id
 
             if blog.id:
                 blog.save()
             else:
-                blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                # blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                blog = Blog.objects.create(user_id=user_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm(instance=blog)
@@ -156,16 +172,20 @@ def write(request, blog_id=None):
 
     return render(request, 'write.html', context)
 
-def board_detail(request, blog_id=None):
-    theme = 'light'
+@login_required(login_url='login')
+def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
-    topics = Category.objects.all()
 
     if request.method == 'POST': 
         if 'delete-button' in request.POST:
             blog.delete()
             return redirect('board')
 
+def board_detail(request, blog_id=None):
+    theme = 'light'
+
+    blog = get_object_or_404(Blog, pk=blog_id)
+    topics = Category.objects.all()
     blog.count += 1
     blog.save()
 
@@ -196,4 +216,6 @@ class image_upload(View):
         filename = default_storage.save(filepath, file)
         file_url = settings.MEDIA_URL + filename
         return JsonResponse({'location': file_url})
+    
+
     
