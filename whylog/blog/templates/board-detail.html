@@ -53,7 +53,7 @@
             <button class="edit-button">수정하기</button>
           </a>
           {% comment %} 삭제버튼 {% endcomment %}
-          <form method="POST" action="{% url 'board_detail' blog.id %}">
+          <form method="POST" action="{% url 'board_delete' blog.id %}">
             {% csrf_token %}
             <input type="hidden" name="delete-button" value="true">
             <button type="submit" class="delete-button">삭제하기</button>
