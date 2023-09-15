@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 from tinymce.models import HTMLField 
 
 class Category(models.Model):
@@ -13,8 +13,8 @@ class Category(models.Model):
 #     password = models.CharField(max_length=100, default = None)
 
 class Blog(models.Model):
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user_id = models.IntegerField(max_length=100, null=False, blank=False)
     title = models.CharField(max_length=200)
     content = HTMLField(blank=True,null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -25,23 +25,23 @@ class Blog(models.Model):
     count = models.IntegerField()
 
 class Comment(models.Model):
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user_id = models.IntegerField(max_length=100, null=False, blank=False)
     comment = models.TextField()
     upload_date = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user_id = models.IntegerField(max_length=100, null=False, blank=False)
     blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE)
     comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True)
 
 class Alarm(models.Model):
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_id = models.IntegerField(max_length=100, null=False, blank=False)
-    # target_user_id = models.IntegerField()
-    target_user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    target_user = models.IntegerField()
+    # target_user_id = models.IntegerField(max_length=100, null=False, blank=False)
     blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE)
     comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE)
     like_id = models.ForeignKey(Like, on_delete=models.CASCADE)
