@@ -8,6 +8,7 @@ from django.conf import settings
 from django.views import View
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from bs4 import BeautifulSoup
 
@@ -100,6 +101,7 @@ def logout(request):
     logout(request)
     return render(request, "board.html", {"is_logined": False})
 
+@login_required(login_url='login')
 def write(request, blog_id=None):
     theme = 'light'
     topics = Category.objects.all()
@@ -156,16 +158,20 @@ def write(request, blog_id=None):
 
     return render(request, 'write.html', context)
 
-def board_detail(request, blog_id=None):
-    theme = 'light'
+@login_required(login_url='login')
+def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
-    topics = Category.objects.all()
 
     if request.method == 'POST': 
         if 'delete-button' in request.POST:
             blog.delete()
             return redirect('board')
 
+def board_detail(request, blog_id=None):
+    theme = 'light'
+
+    blog = get_object_or_404(Blog, pk=blog_id)
+    topics = Category.objects.all()
     blog.count += 1
     blog.save()
 
