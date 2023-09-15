@@ -1,6 +1,7 @@
 from django import forms
-from .models import Blog, User
+from .models import Blog
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 
 class UserForm(AuthenticationForm):
     class Meta:
