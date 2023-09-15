@@ -15,6 +15,7 @@ urlpatterns = [
     path('', board, name='board'),
     path('board/<int:category_id>', board, name='board'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('signup/', signup, name='signup'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('write/', write, name='write'),
     path('write/<int:blog_id>', write, name='write'),
