@@ -135,13 +135,17 @@ def write(request, blog_id=None):
 
             title = request.POST['title']
             content = request.POST['content']
+
             in_private = False
+            private_value = request.POST.get('in_private')
+            if private_value:
+                in_private = True
 
             category_id = request.POST['topic']
             blog.category_id = category_id
 
             temporary = False
-            
+
             if 'temp-save-button' in request.POST:
                 blog.temporary = True
             else:
