@@ -82,10 +82,11 @@
                 <div class="topic-wrapper">
                     <div class="topic">TOPIC</div>
                     <div class="topic-list">
-
-                        {% for topic in topics %}                            
+                        {% for topic in topics %}                          
                             <div class="topic-item">
-                                <input type="radio" class="topic" name="topic" value="{{ topic.id }}">
+                                <input type="radio" class="topic" name="topic" 
+                                {% if post.category_id == topic.id %}checked{% endif %}
+                                value="{{ topic.id }}">
                                 <label for="{{ topic.category }}">{{ topic.category }}</label>
                             </div>
                         {% endfor %}
@@ -95,7 +96,10 @@
                 <div class="box">
                     <div class="info">
                     <h2>UPLOAD INFO</h2>
-                    <p>공개여부: {% if edit_mode %}전체공개{% else %}미공개{% endif %}</p>
+                    <p>공개여부: 
+                        <label for="in_private"><input type="checkbox" name="in_private" 
+                            {% if post.in_private %} checked {% endif %}
+                            id="in_private">비공개</label></p>
                     <input type="file" name="file" id="imageUpload" style="display:none;">
                     <button type="button" class="button-line" onclick="document.getElementById('imageUpload').click();">이미지 업로드</button>
                     </div>
