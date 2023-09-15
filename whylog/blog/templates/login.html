@@ -15,8 +15,14 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type='submit'>Login</button>
+                <button id="signupButton">Sign Up</button>
             </div>
         </form>
     </div>
 </body>
+<script>
+    document.getElementById("signupButton").addEventListener("click", function() {
+      window.location.href = "{% url 'signup' %}";
+    });
+  </script>
 </html>
