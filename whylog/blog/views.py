@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from . models import *
 from .serializers import *
-from .forms import BlogForm, UserForm
+from .forms import BlogForm, UserForm, CommentForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
@@ -215,6 +215,10 @@ def board_detail(request, blog_id=None):
     for recommended_blog in recommended_blogs:
         recommended_blog.image_tag = extract_image_src(recommended_blog.content)
     
+    comment_form = None
+    if request.user:        
+        comment_form = CommentForm()
+
     context = {
         'theme': theme, 
         'blog': blog,
@@ -224,6 +228,7 @@ def board_detail(request, blog_id=None):
         'recommended_posts': recommended_blogs,
         'MEDIA_URL': settings.MEDIA_URL,
         'topics' : topics,
+        'comment_form' : comment_form,
     }
 
     return render(request, 'board-detail.html', context)
@@ -236,5 +241,14 @@ class image_upload(View):
         file_url = settings.MEDIA_URL + filename
         return JsonResponse({'location': file_url})
     
+@login_required(login_url='login')
+def comment_write(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
 
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = User.objects.get(pk=request.user.id)
+            comment.blog
     

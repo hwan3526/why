@@ -1,5 +1,5 @@
 from django import forms
-from .models import Blog
+from .models import Blog, Comment
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -18,5 +18,13 @@ class BlogForm(forms.ModelForm):
         fields = ['title' , 'content']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': '제목'})
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+        widgets = {
+            'comment': forms.TextInput(attrs={'placeholder': '댓글 입력'})
         }
         
