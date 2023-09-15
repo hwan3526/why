@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}"/>
+    <title>Sign Up</title>
+</head>
+<body>
+    <div class="login-box" >
+        <h2>Sign Up</h2>
+        <form method="post">
+            <div class="box">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type='submit'>Register</button>
+                <button type="reset">Cancel</button>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>오류 발생:</strong>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
