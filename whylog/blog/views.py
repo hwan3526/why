@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
+from django.contrib.auth.models import User
 from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
@@ -136,6 +137,9 @@ def write(request, blog_id=None):
             content = request.POST['content']
             in_private = False
 
+            category_id = request.POST['topic']
+            blog.category_id = category_id
+
             temporary = False
             
             if 'temp-save-button' in request.POST:
@@ -145,8 +149,6 @@ def write(request, blog_id=None):
 
             temporary = blog.temporary
             count = 0
-            category_id = request.POST['topic']
-            # user_id_id = request.user.id
             user_id = request.user.id
 
             if blog.id:
@@ -188,6 +190,8 @@ def board_detail(request, blog_id=None):
     if blog.user_id != request.user.id:
         blog.save()
 
+    author_name = User.objects.filter(id=blog.user_id).first()
+
     prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
     next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
 
@@ -199,6 +203,7 @@ def board_detail(request, blog_id=None):
     context = {
         'theme': theme, 
         'blog': blog,
+        'author_name': author_name,
         'previous_post': prev_blog,
         'next_post': next_blog,
         'recommended_posts': recommended_blogs,
