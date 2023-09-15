@@ -132,7 +132,6 @@ def write(request, blog_id=None):
                 blog.delete() 
                 return redirect('board') 
 
-            # blog.user = request.user.id
             title = request.POST['title']
             content = request.POST['content']
             in_private = False
@@ -144,8 +143,6 @@ def write(request, blog_id=None):
             else:
                 blog.temporary = False
 
-            print(request)
-
             temporary = blog.temporary
             count = 0
             category_id = request.POST['topic']
@@ -155,7 +152,6 @@ def write(request, blog_id=None):
             if blog.id:
                 blog.save()
             else:
-                # blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
                 blog = Blog.objects.create(user_id=user_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
@@ -176,10 +172,11 @@ def write(request, blog_id=None):
 def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
 
-    if request.method == 'POST': 
-        if 'delete-button' in request.POST:
-            blog.delete()
-            return redirect('board')
+    if request.user.id == 1 or request.user.id == blog.user_id:
+        if request.method == 'POST': 
+            if 'delete-button' in request.POST:
+                blog.delete()
+                return redirect('board')
 
 def board_detail(request, blog_id=None):
     theme = 'light'
