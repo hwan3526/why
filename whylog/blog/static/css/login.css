@@ -40,12 +40,22 @@ button{
     width: 200px;
 }
 
-button[type="submit"] {
+button[type="submit"],
+ #signupButton {
     background-color: #1e1e1e;
     color: white;
     padding: 10px 20px; 
     border: none; 
     width: 100%;
+}
+
+button[type="reset"] {
+    background-color: white;
+    color: #1e1e1e;
+    padding: 10px 20px; 
+    border: none; 
+    width: 100%;
+    border: 1px solid #1e1e1e;
 }
 
 button:hover {
