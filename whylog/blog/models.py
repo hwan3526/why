@@ -27,14 +27,15 @@ class Blog(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # user_id = models.IntegerField(max_length=100, null=False, blank=False)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     comment = models.TextField()
     upload_date = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # user_id = models.IntegerField(max_length=100, null=False, blank=False)
-    blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True)
 
 class Alarm(models.Model):
@@ -42,9 +43,9 @@ class Alarm(models.Model):
     # user_id = models.IntegerField(max_length=100, null=False, blank=False)
     target_user = models.IntegerField()
     # target_user_id = models.IntegerField(max_length=100, null=False, blank=False)
-    blog_id = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    like_id = models.ForeignKey(Like, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    like = models.ForeignKey(Like, on_delete=models.CASCADE)
     alarm_date = models.DateTimeField(auto_now_add=True)
 
 
