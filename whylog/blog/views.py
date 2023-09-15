@@ -4,6 +4,7 @@ from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
 from django.views import View
 from django.core.files.storage import default_storage
@@ -80,11 +81,22 @@ def board(request, category_id=None):
 def board_view(request):
     return redirect('board')
 
-def login(request):
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('board')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {"form": form})
+
+def user_login(request):
     is_logined = True
 
     if request.user.is_authenticated:
-        return redirect('blog:board')
+        return redirect('board')
     else:
         form = UserForm(data=request.POST or None)
         if request.method == "POST":
@@ -94,7 +106,7 @@ def login(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return redirect('blog:board')
+                    return redirect('board')
         return render(request, 'board.html', {'form': form, "is_logined":is_logined})
 
 def logout(request):
@@ -120,7 +132,7 @@ def write(request, blog_id=None):
                 blog.delete() 
                 return redirect('board') 
 
-            blog.user = request.user.id
+            # blog.user = request.user.id
             title = request.POST['title']
             content = request.POST['content']
             in_private = False
@@ -137,12 +149,14 @@ def write(request, blog_id=None):
             temporary = blog.temporary
             count = 0
             category_id = request.POST['topic']
-            user_id_id = request.user.id
+            # user_id_id = request.user.id
+            user_id = request.user.id
 
             if blog.id:
                 blog.save()
             else:
-                blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                # blog = Blog.objects.create(user_id_id=user_id_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                blog = Blog.objects.create(user_id=user_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm(instance=blog)
@@ -202,4 +216,6 @@ class image_upload(View):
         filename = default_storage.save(filepath, file)
         file_url = settings.MEDIA_URL + filename
         return JsonResponse({'location': file_url})
+    
+
     
