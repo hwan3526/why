@@ -184,7 +184,9 @@ def board_detail(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
     topics = Category.objects.all()
     blog.count += 1
-    blog.save()
+
+    if blog.user_id != request.user.id:
+        blog.save()
 
     prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
     next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
