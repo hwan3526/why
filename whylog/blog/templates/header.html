@@ -19,16 +19,9 @@
                 {% for topic in topics %}
                     <li class="nav-item"><a href="{% url 'board' topic.id %}">{{ topic.category }}</a></li>
                 {% endfor %}
-                
-                {% comment %} <li class="nav-buttons"> {% endcomment %}
-                {% if user.is_authenticated %}
-                {% comment %} <li class="nav-item">
-                    <a class="logout-button" href="/logout">Logout</a>
-                </li> {% endcomment %}
-                {% endif %}
-                </li>
             </ul>
             {% if user.is_authenticated %}
+                <button class="primary-button">{{ user.username }}</button>
                 <button class="logout-button" onclick="location.href='/logout'">Logout</button>
                 <button class="primary-button" onclick="location.href='/write'">Just Write!</button>
             {% else %}

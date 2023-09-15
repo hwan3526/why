@@ -12,6 +12,7 @@
     {% else %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css' %}"/>
     {% endif %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <title>WHYLOG - {{ blog.title }}</title>
 </head>
 <body>
@@ -22,9 +23,12 @@
         {% comment %} 본문영역 {% endcomment %}
         <div class="big-box">
           <div class="post-info">
-            <h5>{{ blog.upload_date | date:'Y m d'}} | {{ blog.count }} 조회</h5>
-            <h1>{{ blog.title }}</h1>
-            <h5>{{ blog.user.username }}</h5>
+            <h5>{{ blog.upload_date | date:'Y m d'}} | by {{ blog.count }} 조회</h5>
+            {% if blog.temporary %}
+              <h5>임시저장된 글입니다.</h5>
+            {% endif %}
+            <h1>{% if blog.in_private %}<span class="material-symbols-outlined">lock</span>{% endif %} {{ blog.title }}</h1>
+            <h5>{{ author_name }}</h5>
             <h5 class="topic-box">{{ blog.category.category }}</h5>
           </div>
           <div class="post-content">{{ blog.content | safe }}</div>
