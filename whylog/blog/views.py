@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
+from django.contrib.auth.models import User
+from django.db.models import Q
 from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
@@ -52,12 +54,21 @@ def board(request, category_id=None):
     is_logined = False
     topics = Category.objects.all()
 
-    if category_id:
-        posts = Blog.objects.filter(category_id=category_id, temporary=False).order_by('-upload_date__date', '-count')
-        first_post = posts[0] if posts else None
+    base_query = Q(Q(user_id=request.user.id) & Q(in_private=True)) | Q(~Q(user_id=request.user.id) & Q(in_private=False))
+
+    if request.user.id == 1:
+        posts = Blog.objects.filter(
+            Q(category_id=category_id) if category_id else Q(),
+            temporary=False
+        ).order_by('-upload_date__date', '-count')
     else:
-        posts = Blog.objects.filter(temporary=False).order_by('-upload_date__date', '-count')
-        first_post = posts[0] if posts else None
+        posts = Blog.objects.filter(
+            base_query,
+            Q(category_id=category_id) if category_id else Q(),
+            temporary=False
+        ).order_by('-upload_date__date', '-count')
+
+    first_post = posts.first()
 
     for post in posts:
         post.image_tag = extract_image_src(post.content)
@@ -121,7 +132,7 @@ def write(request, blog_id=None):
     if blog_id:
         blog = get_object_or_404(Blog, id=blog_id)
     else:
-        blog = Blog.objects.filter(user_id=request.user.id, temporary=True).order_by('-upload_date').first()
+        blog = Blog.objects.filter(user=request.user.id, temporary=True).order_by('-upload_date').first()
 
     if request.method == 'POST':
         form = BlogForm(request.POST, request.FILES, instance=blog)
@@ -134,10 +145,17 @@ def write(request, blog_id=None):
 
             title = request.POST['title']
             content = request.POST['content']
+
             in_private = False
+            private_value = request.POST.get('in_private')
+            if private_value:
+                in_private = True
+
+            category_id = request.POST['topic']
+            blog.category_id = category_id
 
             temporary = False
-            
+
             if 'temp-save-button' in request.POST:
                 blog.temporary = True
             else:
@@ -145,14 +163,13 @@ def write(request, blog_id=None):
 
             temporary = blog.temporary
             count = 0
-            category_id = request.POST['topic']
-            # user_id_id = request.user.id
-            user_id = request.user.id
+            finduser = User.objects.get(pk=request.user.id)
+            blog.user = finduser
 
             if blog.id:
                 blog.save()
             else:
-                blog = Blog.objects.create(user_id=user_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                blog = Blog.objects.create(user_id=finduser.id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm(instance=blog)
@@ -172,7 +189,7 @@ def write(request, blog_id=None):
 def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
 
-    if request.user.id == 1 or request.user.id == blog.user_id:
+    if request.user.id == 1 or request.user.id == blog.user.id:
         if request.method == 'POST': 
             if 'delete-button' in request.POST:
                 blog.delete()
@@ -183,13 +200,17 @@ def board_detail(request, blog_id=None):
 
     blog = get_object_or_404(Blog, pk=blog_id)
     topics = Category.objects.all()
-    blog.count += 1
-    blog.save()
 
-    prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
-    next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
+    if blog.user.id != request.user.id and blog.in_private == False:
+        blog.count += 1
+        blog.save()
 
-    recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False).exclude(id=blog.id).order_by('-upload_date')[:2]
+    author_user = User.objects.get(id=blog.user.id)
+
+    prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False, in_private=False).order_by('-id').first()
+    next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False, in_private=False).order_by('id').first()
+
+    recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False, in_private=False).exclude(id=blog.id).order_by('-upload_date')[:2]
 
     for recommended_blog in recommended_blogs:
         recommended_blog.image_tag = extract_image_src(recommended_blog.content)
@@ -197,6 +218,7 @@ def board_detail(request, blog_id=None):
     context = {
         'theme': theme, 
         'blog': blog,
+        'author_name': author_user.username,
         'previous_post': prev_blog,
         'next_post': next_blog,
         'recommended_posts': recommended_blogs,
