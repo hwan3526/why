@@ -14,7 +14,7 @@ class User(models.Model):
 
 class Blog(models.Model):
     # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_id = models.CharField(max_length=100, null=True, blank=True)
+    user_id = models.IntegerField(max_length=100, null=False, blank=False)
     title = models.CharField(max_length=200)
     content = HTMLField(blank=True,null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
