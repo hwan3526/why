@@ -23,5 +23,9 @@ urlpatterns = [
     path('board-delete/<int:blog_id>', board_delete, name='board_delete'),
     path('image-upload/', image_upload.as_view(), name='image_upload'),
 
+    path('comment-write/<int:blog_id>', comment_write, name='comment_write'),
+    path('comment-delete/<int:comment_id>', comment_delete, name='comment_delete'),
+    path('comment-edit/<int:comment_id>', comment_edit, name='comment_edit'),
+
     path('accounts/profile/', board_view, name='board_view'),
 ]
