@@ -122,7 +122,7 @@ def write(request, blog_id=None):
     if blog_id:
         blog = get_object_or_404(Blog, id=blog_id)
     else:
-        blog = Blog.objects.filter(user_id=request.user.id, temporary=True).order_by('-upload_date').first()
+        blog = Blog.objects.filter(user=request.user.id, temporary=True).order_by('-upload_date').first()
 
     if request.method == 'POST':
         form = BlogForm(request.POST, request.FILES, instance=blog)
@@ -153,12 +153,13 @@ def write(request, blog_id=None):
 
             temporary = blog.temporary
             count = 0
-            user_id = request.user.id
+            finduser = User.objects.get(pk=request.user.id)
+            blog.user = finduser
 
             if blog.id:
                 blog.save()
             else:
-                blog = Blog.objects.create(user_id=user_id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+                blog = Blog.objects.create(user_id=finduser.id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm(instance=blog)
@@ -178,7 +179,7 @@ def write(request, blog_id=None):
 def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
 
-    if request.user.id == 1 or request.user.id == blog.user_id:
+    if request.user.id == 1 or request.user.id == blog.user.id:
         if request.method == 'POST': 
             if 'delete-button' in request.POST:
                 blog.delete()
@@ -190,11 +191,11 @@ def board_detail(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
     topics = Category.objects.all()
 
-    if blog.user_id != request.user.id:
+    if blog.user.id != request.user.id:
         blog.count += 1
         blog.save()
 
-    author_name = User.objects.filter(id=blog.user_id).first()
+    author_user = User.objects.get(id=blog.user.id)
 
     prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
     next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
@@ -207,7 +208,7 @@ def board_detail(request, blog_id=None):
     context = {
         'theme': theme, 
         'blog': blog,
-        'author_name': author_name,
+        'author_name': author_user.username,
         'previous_post': prev_blog,
         'next_post': next_blog,
         'recommended_posts': recommended_blogs,
