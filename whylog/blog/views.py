@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
 from django.contrib.auth.models import User
+from django.db.models import Q
 from . models import *
 from .serializers import *
 from .forms import BlogForm, UserForm
@@ -53,12 +54,21 @@ def board(request, category_id=None):
     is_logined = False
     topics = Category.objects.all()
 
-    if category_id:
-        posts = Blog.objects.filter(category_id=category_id, temporary=False).order_by('-upload_date__date', '-count')
-        first_post = posts[0] if posts else None
+    base_query = Q(Q(user_id=request.user.id) & Q(in_private=True)) | Q(~Q(user_id=request.user.id) & Q(in_private=False))
+
+    if request.user.id == 1:
+        posts = Blog.objects.filter(
+            Q(category_id=category_id) if category_id else Q(),
+            temporary=False
+        ).order_by('-upload_date__date', '-count')
     else:
-        posts = Blog.objects.filter(temporary=False).order_by('-upload_date__date', '-count')
-        first_post = posts[0] if posts else None
+        posts = Blog.objects.filter(
+            base_query,
+            Q(category_id=category_id) if category_id else Q(),
+            temporary=False
+        ).order_by('-upload_date__date', '-count')
+
+    first_post = posts.first()
 
     for post in posts:
         post.image_tag = extract_image_src(post.content)
@@ -191,16 +201,16 @@ def board_detail(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
     topics = Category.objects.all()
 
-    if blog.user.id != request.user.id:
+    if blog.user.id != request.user.id and blog.in_private == False:
         blog.count += 1
         blog.save()
 
     author_user = User.objects.get(id=blog.user.id)
 
-    prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False).order_by('-id').first()
-    next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False).order_by('id').first()
+    prev_blog = Blog.objects.filter(id__lt=blog.id, temporary=False, in_private=False).order_by('-id').first()
+    next_blog = Blog.objects.filter(id__gt=blog.id, temporary=False, in_private=False).order_by('id').first()
 
-    recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False).exclude(id=blog.id).order_by('-upload_date')[:2]
+    recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False, in_private=False).exclude(id=blog.id).order_by('-upload_date')[:2]
 
     for recommended_blog in recommended_blogs:
         recommended_blog.image_tag = extract_image_src(recommended_blog.content)
