@@ -24,6 +24,7 @@
         <div class="big-box">
           <div class="post-info">
             <h5>{{ blog.upload_date | date:'Y m d'}} | by {{ blog.count }} 조회</h5>
+            <h5>Likes: <span class="material-symbols-outlined">favorite</span></h5>
             {% if blog.temporary %}
               <h5>임시저장된 글입니다.</h5>
             {% endif %}
@@ -49,6 +50,43 @@
           </div>
         </div>
       </div>
+
+      {% comment %} 댓글 영역 {% endcomment %}
+        <div class="comment-box">
+          <ul>
+            {% for comment in comments %}
+                <li>
+                    <div class="comment">
+                        {{ comment.user }} | 
+                        <span class="comment-text">{{ comment.comment }}</span> | 
+                        {{ comment.upload_date | date:'Y-m-d H:i:s'}}
+                        <span class="material-symbols-outlined favorite">favorite</span>
+                        {% if user.id == comment.user.id %}
+                        <span class="material-symbols-outlined edit" data-comment-id="{{ comment.id }}">edit</span>
+                        {% endif %}
+                        {% if user.id == comment.user.id or user.id == 1 %}
+                            <a href="{% url 'comment_delete' comment.id %}">
+                              <span class="material-symbols-outlined">delete</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="edit-comment" style="display:none;">
+                        <input type="text" class="edit-comment-input" value="{{ comment.comment }}">
+                        <button class="save-comment">수정</button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+      
+        {% if blog.in_private == False or blog.user.id == request.user.id %}
+        <form method="POST" action="{% url 'comment_write' blog.id %}">
+          {% csrf_token %}
+          {{ comment_form.as_p }}
+          <input type="submit" name="comment-button" class="comment-button" value="댓글 작성" />
+        </form>
+        {% endif %}
+      </div>
+
       {% if user.is_authenticated %}
       <div class="button-box">
         <div class="box-divider" style="gap:10px">
@@ -122,6 +160,60 @@
       // 알림 표시
       alert('포스트 링크가 클립보드에 복사되었습니다');
     });
+    
+    document.addEventListener("DOMContentLoaded", function() {
+    var editButtons = document.querySelectorAll(".edit");
+    var saveButtons = document.querySelectorAll(".save-comment");
+
+    for (var i = 0; i < editButtons.length; i++) {
+        editButtons[i].addEventListener("click", function() {
+            var commentId = this.getAttribute("data-comment-id");
+            var commentTextElement = this.parentElement.querySelector(".comment-text");
+            var editDiv = this.parentElement.parentElement.querySelector(".edit-comment");
+            var editInput = editDiv.querySelector(".edit-comment-input");
+
+            commentTextElement.style.display = "none";
+            editInput.value = commentTextElement.textContent;
+            editDiv.style.display = "block";
+        });
+    }
+
+    for (var i = 0; i < saveButtons.length; i++) {
+        saveButtons[i].addEventListener("click", function() {
+            var commentId = this.parentElement.parentElement.querySelector(".edit").getAttribute("data-comment-id");
+            var editDiv = this.parentElement;
+            var editInput = editDiv.querySelector(".edit-comment-input");
+            var commentTextElement = editDiv.parentElement.querySelector(".comment-text");
+
+            var editedComment = editInput.value;
+            var url = "/comment-edit/" + commentId;
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": '{{ csrf_token }}'
+                },
+                body: "edited_comment=" + encodeURIComponent(editedComment)
+            })
+            .then(response => {
+                if (response.ok) {
+                    commentTextElement.textContent = editedComment;
+                    commentTextElement.style.display = "inline";
+                    editDiv.style.display = "none";
+                }
+            })
+            .catch(error => {
+                console.error("오류 발생:", error);
+            });
+
+            commentTextElement.textContent = editInput.value;
+            commentTextElement.style.display = "inline";
+            editDiv.style.display = "none";
+        });
+        }
+    });
+
   </script>
   
 </html>
