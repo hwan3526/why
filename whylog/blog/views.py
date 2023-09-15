@@ -189,9 +189,9 @@ def board_detail(request, blog_id=None):
 
     blog = get_object_or_404(Blog, pk=blog_id)
     topics = Category.objects.all()
-    blog.count += 1
 
     if blog.user_id != request.user.id:
+        blog.count += 1
         blog.save()
 
     author_name = User.objects.filter(id=blog.user_id).first()
