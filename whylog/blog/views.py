@@ -118,7 +118,7 @@ def write(request, blog_id=None):
 
             if 'delete-button' in request.POST:
                 blog.delete() 
-                return redirect('blog_app:post_list') 
+                return redirect('board') 
 
             blog.user = request.user.id
             title = request.POST['title']
