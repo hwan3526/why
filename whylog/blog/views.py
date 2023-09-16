@@ -67,15 +67,8 @@ def board(request, category_id=None):
             temporary=False
         ).order_by('-upload_date__date', '-count')
 
-    # first_post = posts.first()
-
     for post in posts:
         post.image_tag = extract_image_src(post.content)
-
-    # if first_post:
-    #     first_img = extract_image_src(first_post.content)
-    # else:
-    #     first_img = ''
 
     context = {
         'theme': theme, 
