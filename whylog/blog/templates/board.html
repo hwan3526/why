@@ -20,25 +20,27 @@
 
     <div class="post-list">
 
+        {% for post in posts %} {% if forloop.first %}
         <section class ="first-post-box">
             <div class="container">
                 <div class="post-info-box">
-                    <a href="/board-detail/{{first_post.id}}">
-                        <h3>{{first_post.title}}</h3>
-                        <p>{{first_post.content | remove_img_tags | safe }}</p>
+                    <a href="/board-detail/{{post.id}}">
+                        <h3>{{post.title}}</h3>
+                        <p>{{post.content | remove_img_tags | safe }}</p>
                     </a>
-                    <button onclick="location.href='/board-detail/{{first_post.id}}'">READ MORE</button>
+                    <button onclick="location.href='/board-detail/{{post.id}}'">READ MORE</button>
                 </div>
                 <div class="thumbnail-img">
-                    <img href="/board-detail/{{first_post.id}}" src="{% static img %}">
+                    <img href="/board-detail/{{post.id}}" src="{% static post.image_tag %}">
                 </div>
             </div>
         </section>
+        {% endif %} {% endfor %}
 
         <main class="post-box">
             <div class="container">
     
-                {% for post in posts %}
+                {% for post in posts %}{% if not forloop.first %}
                 <div class="card">
                     <a href="/board-detail/{{post.id}}">
                         <div class="card-thumbnail-img">
@@ -54,7 +56,7 @@
                         </div>
                     </a>
                 </div>
-                {% endfor %}
+                {% endif %}{% endfor %}
             </div>
         </main>
 
