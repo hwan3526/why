@@ -54,36 +54,33 @@ def board(request, category_id=None):
     is_logined = False
     topics = Category.objects.all()
 
-    base_query = Q(Q(user_id=request.user.id) & Q(in_private=True)) | Q(~Q(user_id=request.user.id) & Q(in_private=False))
-
     if request.user.id == 1:
         posts = Blog.objects.filter(
             Q(category_id=category_id) if category_id else Q(),
-            temporary=False
+            temporary=False,
+            in_private=True
         ).order_by('-upload_date__date', '-count')
     else:
         posts = Blog.objects.filter(
-            base_query,
+            Q(Q(user_id=request.user.id)) | Q(~Q(user_id=request.user.id) & Q(in_private=False)),
             Q(category_id=category_id) if category_id else Q(),
             temporary=False
         ).order_by('-upload_date__date', '-count')
 
-    first_post = posts.first()
+    # first_post = posts.first()
 
     for post in posts:
         post.image_tag = extract_image_src(post.content)
 
-    if first_post:
-        first_img = extract_image_src(first_post.content)
-    else:
-        first_img = ''
+    # if first_post:
+    #     first_img = extract_image_src(first_post.content)
+    # else:
+    #     first_img = ''
 
     context = {
         'theme': theme, 
         "is_logined": is_logined, 
-        'first_post': first_post, 
-        'posts': posts[1:], 
-        'img': first_img,
+        'posts': posts, 
         'topics' : topics
     }
 
@@ -143,33 +140,32 @@ def write(request, blog_id=None):
                 blog.delete() 
                 return redirect('board') 
 
-            title = request.POST['title']
-            content = request.POST['content']
-
-            in_private = False
+            # in_private = False
             private_value = request.POST.get('in_private')
+
+            print(private_value)
+
+            # blog.in_private = request.POST.get('in_private')
+            # on / None
             if private_value:
-                in_private = True
+                blog.in_private = True
+            else:
+                blog.in_private = False
 
             category_id = request.POST['topic']
             blog.category_id = category_id
-
-            temporary = False
 
             if 'temp-save-button' in request.POST:
                 blog.temporary = True
             else:
                 blog.temporary = False
 
-            temporary = blog.temporary
-            count = 0
+            blog.count = 0
             finduser = User.objects.get(pk=request.user.id)
             blog.user = finduser
 
-            if blog.id:
-                blog.save()
-            else:
-                blog = Blog.objects.create(user_id=finduser.id, category_id=category_id, in_private=in_private, temporary=temporary, count=count, title=title, content=content)
+            blog.save()
+
             return redirect('board_detail', blog_id=blog.id)
     else:
         form = BlogForm(instance=blog)
@@ -258,6 +254,7 @@ def comment_write(request, blog_id):
             return redirect('board_detail', blog_id = blog.id)
     else:
         comment_form = Comment()
+
     return render(request, 'board-detail.html', {"comment_form": comment_form})
 
 @login_required(login_url='login')
