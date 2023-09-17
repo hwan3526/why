@@ -67,15 +67,8 @@ def board(request, category_id=None):
             temporary=False
         ).order_by('-upload_date__date', '-count')
 
-    # first_post = posts.first()
-
     for post in posts:
         post.image_tag = extract_image_src(post.content)
-
-    # if first_post:
-    #     first_img = extract_image_src(first_post.content)
-    # else:
-    #     first_img = ''
 
     context = {
         'theme': theme, 
@@ -140,13 +133,8 @@ def write(request, blog_id=None):
                 blog.delete() 
                 return redirect('board') 
 
-            # in_private = False
             private_value = request.POST.get('in_private')
 
-            print(private_value)
-
-            # blog.in_private = request.POST.get('in_private')
-            # on / None
             if private_value:
                 blog.in_private = True
             else:
@@ -217,6 +205,10 @@ def board_detail(request, blog_id=None):
 
     comments = Comment.objects.filter(blog_id = blog_id)
 
+    finduser = User.objects.get(pk=request.user.id)
+    like_post = Like.objects.filter(user=finduser, blog=blog)
+    liked_comments = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+
     context = {
         'theme': theme, 
         'blog': blog,
@@ -228,6 +220,8 @@ def board_detail(request, blog_id=None):
         'topics' : topics,
         'comment_form' : comment_form,
         'comments' : comments,
+        'like_post' : like_post,
+        'liked_comments' : liked_comments,
     }
 
     return render(request, 'board-detail.html', context)
@@ -276,4 +270,39 @@ def comment_edit(request, comment_id):
         comment.save()
         return HttpResponse(status=200)
     
+    return redirect('board_detail', blog_id = blog_id)
+
+@login_required(login_url='login')
+def like_comment_toggle(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    blog_id = comment.blog.id
+
+    if request.method == 'POST':
+        finduser = User.objects.get(pk=request.user.id)
+        findLiked = Like.objects.filter(user=finduser, comment=comment)
+
+        if findLiked:
+            findLiked.delete()
+        else:
+            liked = Like.objects.create(user=finduser, comment=comment)
+
+        return HttpResponse(status=200)
+
+    return redirect('board_detail', blog_id = blog_id)
+
+@login_required(login_url='login')
+def like_blog_toggle(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == 'POST':
+        finduser = User.objects.get(pk=request.user.id)
+        findLiked = Like.objects.filter(user=finduser, blog=blog)
+
+        if findLiked:
+            findLiked.delete()
+        else:
+            liked = Like.objects.create(user=finduser, blog=blog)
+
+        return HttpResponse(status=200)
+
     return redirect('board_detail', blog_id = blog_id)
