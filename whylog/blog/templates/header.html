@@ -25,15 +25,53 @@
 
                 <div class="nav-notification">
                     <span class="nav-notifications material-symbols-outlined" title="알림">notifications</span>
-                    <div class="notificationCount" style="display: none;">
-                        <span>0</span>
-                    </div>
+                    {% if notifications.recent_alarms|length > 0 %}
+                        <div class="notificationCount">
+                    {% else %}
+                        <div class="notificationCount" style="display: none;">
+                    {% endif %}
+                            <span>{{ notifications.recent_alarms|length }}</span>
+                        </div>
                     <div class="notificationList" style="display: none;">
                         <div class="notiHeader">
                             <p>알림</p>
                         </div>
                         <div class="notiContent">
-                            <p class="noNoti" style="display: block;">알림이 없습니다.</p>
+
+                            {% csrf_token %}
+                            {% if notifications.blog_comment %}
+                            {% for items in notifications.blog_comment %}
+                                <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog.id }}, {{ items.alarm_id }})">
+                                    <p>{{ items.blog.title }} 에</p>
+                                    <p>{{ items.comment.user.username }} 님이 댓글을 달았습니다.</p>
+                                    <p>{{ items.comment.upload_date | date:'Y-m-d H:i:s' }}</p>
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if notifications.blog_like %}
+                            {% for items in notifications.blog_like %}
+                                <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog.id }}, {{ items.alarm_id }})">
+                                    <p>{{ items.blog.title }} 에</p>
+                                    <p>{{ items.blog.user.username }} 님이 좋아요를 눌렀습니다.</p>
+                                    <p>{{ items.blog.upload_date | date:'Y-m-d H:i:s' }}</p>
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if notifications.comment_like %}
+                            {% for items in notifications.comment_like %}
+                                <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog_id }}, {{ items.alarm_id }})">
+                                    <p>{{ items.comment.comment }} 에</p>
+                                    <p>{{ items.comment.user.username }} 님이 좋아요를 눌렀습니다.</p>
+                                    <p>{{ items.comment.upload_date | date:'Y-m-d H:i:s' }}</p>
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if notifications.blog_comment|length == 0 and notifications.blog_like|length == 0 and notifications.comment_like|length == 0%}
+                                <p class="noNoti" style="display: block;">알림이 없습니다.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
