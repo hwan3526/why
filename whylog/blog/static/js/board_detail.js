@@ -21,15 +21,10 @@ function extractNumberFromCommentId(likedId) {
     };
 }
 
-const csrfTokenElement = document.querySelector('input[name=csrfmiddlewaretoken]');
-const csrfToken = csrfTokenElement ? csrfTokenElement.value : null;
-
 function saveCommentLike(likedId) {
     var numericPart = extractNumberFromCommentId(likedId).numericPart;
     var nonNumericPart = extractNumberFromCommentId(likedId).nonNumericPart;
     var url = "/like-" + nonNumericPart + "/" + numericPart;
-
-    console.log(url);
 
     fetch(url, {
         method: 'POST',
@@ -40,9 +35,9 @@ function saveCommentLike(likedId) {
     })
     .then((response) => {
         if (response.ok) {
-        console.log('좋아요가 저장되었습니다.');
+            console.log('좋아요가 저장되었습니다.');
         } else {
-        console.error('서버와 통신 중 오류가 발생했습니다.');
+            console.error('서버와 통신 중 오류가 발생했습니다.');
         }
     })
     .catch((error) => {
