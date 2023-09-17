@@ -41,7 +41,7 @@
 
             {% for recommended_post in recommended_posts %}
               <div class="recommend-box">
-                <a href="{% url 'board_detail' recommended_post.id %}">
+                <a style="color: black" href="{% url 'board_detail' recommended_post.id %}">
                   <img src="{% static recommended_post.image_tag %}">
                   {{ recommended_post.title }}</a>
               </div>
