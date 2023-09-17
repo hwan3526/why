@@ -22,6 +22,22 @@
             </ul>
             {% if user.is_authenticated %}
                 <button class="primary-button">{{ user.username }}</button>
+
+                <div class="nav-notification">
+                    <span class="nav-notifications material-symbols-outlined" title="알림">notifications</span>
+                    <div class="notificationCount" style="display: none;">
+                        <span>0</span>
+                    </div>
+                    <div class="notificationList" style="display: none;">
+                        <div class="notiHeader">
+                            <p>알림</p>
+                        </div>
+                        <div class="notiContent">
+                            <p class="noNoti" style="display: block;">알림이 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="logout-button" onclick="location.href='/logout'">Logout</button>
                 <button class="primary-button" onclick="location.href='/write'">Just Write!</button>
             {% else %}
