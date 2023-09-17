@@ -149,3 +149,67 @@ button:hover{
   line-height: 100%; /* 28px */
   letter-spacing: -1.4px;
 }
+
+/* notification settings */
+.notificationCount {
+  display: flex;
+  position: absolute;
+  border-radius: 40px;
+  background-color: red;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  width: 16px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  right: 578px;
+  top: 35px;
+  color: #F9F8F4;
+}
+
+.notificationList {
+  display: flex;
+  position: absolute;
+  right: 550px;
+  top: 30px;
+  border-radius: 5px;
+  background-color: #F9F8F4;
+  color: #1E1E1E;
+  min-width: 200px;
+
+  padding: 10px;
+  flex-direction: column;
+}
+
+.notificationList p {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.notiHeader {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+.notiHeader > p {
+  font-weight: 700;
+}
+
+.notificationContents {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+}
+
+.notiContent {
+  padding-top: 10px;
+}
+
+.notiContent > p {
+  padding-top: 10px;
+}
