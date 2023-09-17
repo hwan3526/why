@@ -34,8 +34,8 @@ class Comment(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # user_id = models.IntegerField(max_length=100, null=False, blank=False)
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE,null=True)
     upload_date = models.DateTimeField(auto_now_add=True)
 
 class Alarm(models.Model):
