@@ -134,7 +134,7 @@ def write(request, blog_id=None):
                 return redirect('board') 
 
             private_value = request.POST.get('in_private')
-            
+
             if private_value:
                 blog.in_private = True
             else:
@@ -205,6 +205,10 @@ def board_detail(request, blog_id=None):
 
     comments = Comment.objects.filter(blog_id = blog_id)
 
+    finduser = User.objects.get(pk=request.user.id)
+    like_post = Like.objects.filter(user=finduser, blog=blog)
+    liked_comments = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+
     context = {
         'theme': theme, 
         'blog': blog,
@@ -216,6 +220,8 @@ def board_detail(request, blog_id=None):
         'topics' : topics,
         'comment_form' : comment_form,
         'comments' : comments,
+        'like_post' : like_post,
+        'liked_comments' : liked_comments,
     }
 
     return render(request, 'board-detail.html', context)
@@ -264,4 +270,39 @@ def comment_edit(request, comment_id):
         comment.save()
         return HttpResponse(status=200)
     
+    return redirect('board_detail', blog_id = blog_id)
+
+@login_required(login_url='login')
+def like_comment_toggle(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    blog_id = comment.blog.id
+
+    if request.method == 'POST':
+        finduser = User.objects.get(pk=request.user.id)
+        findLiked = Like.objects.filter(user=finduser, comment=comment)
+
+        if findLiked:
+            findLiked.delete()
+        else:
+            liked = Like.objects.create(user=finduser, comment=comment)
+
+        return HttpResponse(status=200)
+
+    return redirect('board_detail', blog_id = blog_id)
+
+@login_required(login_url='login')
+def like_blog_toggle(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == 'POST':
+        finduser = User.objects.get(pk=request.user.id)
+        findLiked = Like.objects.filter(user=finduser, blog=blog)
+
+        if findLiked:
+            findLiked.delete()
+        else:
+            liked = Like.objects.create(user=finduser, blog=blog)
+
+        return HttpResponse(status=200)
+
     return redirect('board_detail', blog_id = blog_id)
