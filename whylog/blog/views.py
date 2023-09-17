@@ -133,13 +133,8 @@ def write(request, blog_id=None):
                 blog.delete() 
                 return redirect('board') 
 
-            # in_private = False
             private_value = request.POST.get('in_private')
-
-            print(private_value)
-
-            # blog.in_private = request.POST.get('in_private')
-            # on / None
+            
             if private_value:
                 blog.in_private = True
             else:
