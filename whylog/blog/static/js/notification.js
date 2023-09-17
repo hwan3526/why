@@ -6,7 +6,6 @@ notification.addEventListener("click", () => {
     notiList.classList.toggle('active');
     if (notiList.classList.contains('active')) {
         notiList.style.display = 'flex';
-        getNotiContent();
     } else {
         notiList.style.display = 'none';
     }
@@ -23,3 +22,31 @@ document.addEventListener('click', (event) => {
         nofiList.style.transition = 'transition: width 0.3s ease, transform 0.3s ease';
     }
 });
+
+const csrfTokenElement = document.querySelector('input[name=csrfmiddlewaretoken]');
+const csrfToken = csrfTokenElement ? csrfTokenElement.value : null;
+
+function redirectToBlogDetail(blogId, alarmId) {
+    var blogDetailURL = `/board-detail/${blogId}`;
+    var url = "/alarm-read/" + alarmId;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        }
+    })
+    .then((response) => {
+        if (response.ok) {
+            console.log('알림을 읽었습니다.');
+        } else {
+            console.error('서버와 통신 중 오류가 발생했습니다.');
+        }
+    })
+    .catch((error) => {
+        console.error('네트워크 오류:', error);
+    });
+
+    window.location.href = blogDetailURL;
+}
