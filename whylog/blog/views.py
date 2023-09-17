@@ -13,6 +13,8 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from bs4 import BeautifulSoup
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -48,6 +50,69 @@ def extract_image_src(html_content):
         return src_attribute
     else:
         return ''
+    
+def get_notifications(request):
+    finduser = User.objects.get(pk=request.user.id)
+    recent_alarms = Alarm.objects.filter(user=finduser, isRead=False)
+
+    notifications = {
+        'recent_alarms': len(recent_alarms),
+        'blog_comment': [],
+        'blog_like': [],
+        'comment_like': [],
+    }
+
+    for alarm in recent_alarms:
+        if alarm.comment_id:
+            comment = Comment.objects.get(pk=alarm.comment_id)
+            blog = Blog.objects.get(pk=comment.blog.id)
+            blog_comment = {"blog": blog, "comment": comment, "alarm_id": alarm.id}
+            notifications['blog_comment'].append(blog_comment)
+
+        if alarm.like_id:
+            likes = Like.objects.filter(pk=alarm.like_id)
+
+            for like in likes:
+                if like.blog:
+                    blog_like = {"blog": blog, "alarm_id": alarm.id}
+                    notifications['blog_like'].append(blog_like)
+
+                if like.comment:
+                    comment = Comment.objects.get(pk=like.comment.id)
+                    blog = Blog.objects.get(pk=comment.blog.id)
+                    comment_like = {"comment": like.comment, "alarm_id": alarm.id, "blog_id": blog.id}
+                    notifications['comment_like'].append(comment_like)
+
+    return {'recent_alarms': notifications}
+
+@receiver(post_save, sender=Comment)
+def create_comment_notification(sender, instance, created, **kwargs):
+    if created:
+        Alarm.objects.create(
+            user=instance.user,
+            target_user=instance.like.user, 
+            comment=instance,
+            like=None,
+        )
+
+@receiver(post_save, sender=Like)
+def create_Like_notification(sender, instance, created, **kwargs):
+    if created:
+        Alarm.objects.create(
+            user=instance.user,
+            target_user=instance.comment.user, 
+            comment=None,
+            like=instance,
+        )
+
+@login_required
+def alarm_read(request, alarm_id):
+    alarm = get_object_or_404(Alarm, id=alarm_id)
+    if request.method == 'POST':
+        alarm.isRead = True
+        alarm.save()
+    return HttpResponse(status=200)
+
 
 def board(request, category_id=None):
     theme = 'dark'
@@ -57,8 +122,7 @@ def board(request, category_id=None):
     if request.user.id == 1:
         posts = Blog.objects.filter(
             Q(category_id=category_id) if category_id else Q(),
-            temporary=False,
-            in_private=True
+            temporary=False
         ).order_by('-upload_date__date', '-count')
     else:
         posts = Blog.objects.filter(
@@ -70,11 +134,16 @@ def board(request, category_id=None):
     for post in posts:
         post.image_tag = extract_image_src(post.content)
 
+    notifications = []
+    if request.user.is_authenticated:
+        notifications = get_notifications(request)['recent_alarms']
+
     context = {
         'theme': theme, 
         "is_logined": is_logined, 
         'posts': posts, 
-        'topics' : topics
+        'topics' : topics,
+        'notifications': notifications,
     }
 
     return render(request, 'board.html', context)
@@ -158,6 +227,10 @@ def write(request, blog_id=None):
     else:
         form = BlogForm(instance=blog)
 
+    notifications = []
+    if request.user.is_authenticated:
+        notifications = get_notifications(request)['recent_alarms']
+
     context = {
         'theme': theme,
         'form': form,  
@@ -165,6 +238,7 @@ def write(request, blog_id=None):
         'edit_mode': blog_id is not None, 
         'MEDIA_URL': settings.MEDIA_URL,
         'topics' : topics,
+        'notifications': notifications,
     } 
 
     return render(request, 'write.html', context)
@@ -205,9 +279,17 @@ def board_detail(request, blog_id=None):
 
     comments = Comment.objects.filter(blog_id = blog_id)
 
-    finduser = User.objects.get(pk=request.user.id)
-    like_post = Like.objects.filter(user=finduser, blog=blog)
-    liked_comments = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+    like_post = None
+    liked_comments = None
+    
+    if request.user.is_authenticated:
+        finduser = User.objects.get(pk=request.user.id)
+        like_post = Like.objects.filter(user=finduser, blog=blog)
+        liked_comments = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+
+    notifications = []
+    if request.user.is_authenticated:
+        notifications = get_notifications(request)['recent_alarms']
 
     context = {
         'theme': theme, 
@@ -222,6 +304,7 @@ def board_detail(request, blog_id=None):
         'comments' : comments,
         'like_post' : like_post,
         'liked_comments' : liked_comments,
+        'notifications': notifications,
     }
 
     return render(request, 'board-detail.html', context)
