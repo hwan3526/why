@@ -27,5 +27,8 @@ urlpatterns = [
     path('comment-delete/<int:comment_id>', comment_delete, name='comment_delete'),
     path('comment-edit/<int:comment_id>', comment_edit, name='comment_edit'),
 
+    path('like-comment/<int:comment_id>', like_comment_toggle, name='like_comment'),
+    path('like-blog/<int:blog_id>', like_blog_toggle, name='like_blog'),
+
     path('accounts/profile/', board_view, name='board_view'),
 ]
