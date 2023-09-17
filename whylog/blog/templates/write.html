@@ -84,7 +84,7 @@
                     <div class="topic-list">
                         {% for topic in topics %}                          
                             <div class="topic-item">
-                                <input type="radio" class="topic" name="topic" 
+                                <input type="radio" class="topic" name="topic" id="{{ topic.category }}"
                                 {% if post.category_id == topic.id %}checked{% endif %}
                                 value="{{ topic.id }}">
                                 <label for="{{ topic.category }}">{{ topic.category }}</label>
@@ -106,7 +106,7 @@
                     <div class="save-box">
                         <div class="save-button-wrapper">
                         {% if edit_mode %}
-                            <input type="submit" name="delete-button"  class="delete-button" value="삭제"/>
+                            <input type="submit" name="delete-button"  class="temp-save-button" value="삭제"/>
                             <input type="submit" class="save-button" value="수정"/>
                         {% else %}
                             <input type="submit" name="temp-save-button" class="temp-save-button" value="임시저장" />
