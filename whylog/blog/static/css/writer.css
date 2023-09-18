@@ -35,30 +35,35 @@ a {
     padding-bottom: 10px;
 }
 
-#cke_id_content, #cke_1_bottom {
-    border: none;
-}
-
-#cke_1_top {
-    background-color: #fff;
-}
-
-#cke_1_bottom {
-    display: none;
-}
-
-#cke_28 {
-    display: none;
-}
-
 .post-write input {
     display: flex;
-    padding: 10px;
     align-items: flex-start;
     gap: 10px;
     border: none;
 
-    width: 480px;
+    width: 740px;
+    padding: 11px 16px;
+    outline: none;
+    margin-bottom: 18px;
+}
+
+.content {
+    border-radius: 0px !important;
+    width: 740px !important;
+}
+
+.tox-tinymce {
+    border-radius: 0px !important;
+    border: none !important;
+}
+
+.tox-statusbar {
+    display: none !important;
+}
+
+.tox-editor-header {
+    box-shadow: none !important;
+    border-bottom: 1px solid #D8D8D8 !important;
 }
 
 aside {
