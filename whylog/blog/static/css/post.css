@@ -232,6 +232,56 @@ body > a {
     border: none;
 }
 
+.comment-button {
+    background-color:  #e1e0db;
+    text-decoration: none;
+    color: #1e1e1e;
+    padding: 10px;
+    border: none;
+    border-radius: 10%;
+}
+
+.comment-input {
+    /* border: 1px solid black; */
+    margin-top: 10px;
+}
+
+.comment {
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+    margin: 5px 5px 0px 0px;
+}
+
+.comment-user {
+    font-weight: 600;
+}
+
+.comment-date {
+    font-size: small;
+    font-weight: 400;
+}
+
+.comment-liked {
+    font-size: small;
+    color: #1e1e1e;
+}
+
+.edit-comment {
+    background-color: #f9f8f4;
+    border: none;
+}
+
+.save-comment {
+    background-color:  #e1e0db;
+    text-decoration: none;
+    color: #1e1e1e;
+    padding: 5px;
+    border: none;
+    border-radius: 10%;
+    font-size: small;
+}
+
 .liked {
     color: red;
     font-variation-settings:

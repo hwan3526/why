@@ -19,7 +19,7 @@ function toggleLike(liked) {
         likeCountElement.style.display = 'inline';
     }
 
-    likeCountElement.textContent = likeCount;
+    likeCountElement.textContent = likeCount + ' liked';
     saveCommentLike(likedId);
 }
 
