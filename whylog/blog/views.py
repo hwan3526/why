@@ -132,7 +132,10 @@ def board(request, category_id=None):
         ).order_by('-upload_date__date', '-count')
 
     for post in posts:
-        post.image_tag = extract_image_src(post.content)
+        if extract_image_src(post.content):
+            post.image_tag = extract_image_src(post.content)
+        else:
+            post.image_tag = 'media/dudon.png'
 
     notifications = []
     if request.user.is_authenticated:
