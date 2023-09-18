@@ -27,10 +27,15 @@
           <div class="post-info">
             <h5>{{ blog.upload_date | date:'Y m d'}} | by {{ blog.count }} 조회</h5>
 
-            {% if blog.id in like_post %}
+            {% if request.user.id in like_post %}
                 <span id="blog{{ blog.id }}" class="material-symbols-outlined favorite liked" onclick="toggleLike(this)">favorite</span>
             {% else %}
-                <span id="blog{{ blog.id }}" class="material-symbols-outlined favorite" onclick="toggleLike(this)">favorite</span>
+            <span id="blog{{ blog.id }}" class="material-symbols-outlined favorite" onclick="toggleLike(this)">favorite</span>
+            {% endif %}
+            {% if like_post|length > 0%}
+              <span>{{ like_post|length }}</span>
+            {% else %}
+              <span style="display:none;">0</span>
             {% endif %}
 
             {% if blog.temporary %}
@@ -69,13 +74,16 @@
                         <span class="comment-text">{{ comment.comment }}</span> | 
                         {{ comment.upload_date | date:'Y-m-d H:i:s'}}
 
-
-                        {% if comment.id in liked_comments %}
-                            <span id="comment{{ comment.id }}" class="material-symbols-outlined favorite liked" onclick="toggleLike(this)">favorite</span>
+                        {% if user.is_authenticated and comment.id in liked_comment %}
+                          <span id="comment{{ comment.id }}" class="material-symbols-outlined favorite liked" onclick="toggleLike(this)">favorite</span> 
                         {% else %}
-                            <span id="comment{{ comment.id }}" class="material-symbols-outlined favorite" onclick="toggleLike(this)">favorite</span>
+                          <span id="comment{{ comment.id }}" class="material-symbols-outlined favorite">favorite</span>
                         {% endif %}
-
+                        {% if comment_like_count|get_from_dict:comment.id %}
+                          <span>{{ comment_like_count|get_from_dict:comment.id }}</span>
+                        {% else %}
+                          <span style="display:none;">0</span>
+                        {% endif %}
 
                         {% if user.id == comment.user.id %}
                         <span class="material-symbols-outlined edit" data-comment-id="{{ comment.id }}">edit</span>
