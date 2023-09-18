@@ -70,11 +70,22 @@
             {% for comment in comments %}
                 <li>
                     <div class="comment">
-                      <span class="comment-user">{{ comment.user }} | </span> 
-                      <span class="comment-text">{{ comment.comment }} | </span>
-                      <span class="comment-date">{{ comment.upload_date | date:'Y-m-d H:i:s'}}</span>
+                      <div>
+                        <span class="comment-user">{{ comment.user }}</span> 
+                      </div>
+                      <div class="comment-description">
+                        <span class="comment-text">{{ comment.comment }}</span>
+                      </div>
 
-                      {% if user.is_authenticated %}
+                      <div class="edit-comment" style="display:none;">
+                        <input type="text" class="edit-comment-input" value="{{ comment.comment }}">
+                        <button class="save-comment">수정</button>
+                      </div>
+
+                      <div class="comment-data">
+                        <span class="comment-date">{{ comment.upload_date | date:'Y-m-d H:i:s'}}</span>
+                      <div class="comment-like-area">
+                        {% if user.is_authenticated %}
                         {% if comment.id in liked_comment %}
                           <span id="comment{{ comment.id }}" class="material-symbols-outlined favorite liked" onclick="toggleLike(this)">favorite</span> 
                         {% else %}
@@ -88,20 +99,19 @@
                       {% else %}
                         <span style="display:none;">0</span>
                       {% endif %}
+                      </div>
 
                         {% if user.id == comment.user.id %}
-                        <span class="material-symbols-outlined edit" data-comment-id="{{ comment.id }}">edit</span>
+                        <span class="material-symbols-outlined edit" id="edit-comment-id" data-comment-id="{{ comment.id }}">edit</span>
                         {% endif %}
                         {% if user.id == comment.user.id or user.id == 1 %}
                             <a href="{% url 'comment_delete' comment.id %}">
                               <span class="material-symbols-outlined">delete</span>
                             </a>
                         {% endif %}
+                        </div>
                     </div>
-                    <div class="edit-comment" style="display:none;">
-                        <input type="text" class="edit-comment-input" value="{{ comment.comment }}">
-                        <button class="save-comment">수정</button>
-                    </div>
+                    
                 </li>
             {% endfor %}
         </ul>
@@ -189,56 +199,108 @@
       alert('포스트 링크가 클립보드에 복사되었습니다');
     });
     
+    // document.addEventListener("DOMContentLoaded", function() {
+    // var editButtons = document.querySelectorAll(".edit");
+    // var saveButtons = document.querySelectorAll(".save-comment");
+
+    // for (var i = 0; i < editButtons.length; i++) {
+    //     editButtons[i].addEventListener("click", function() {
+    //         var commentId = this.getAttribute("data-comment-id");
+    //         var commentTextElement = this.querySelector(".comment-description");
+    //         var editDiv = this.parentElement.parentElement.querySelector(".edit-comment");
+    //         var editInput = editDiv.querySelector(".edit-comment-input");
+
+    //         commentTextElement.style.display = "none";
+    //         editInput.value = commentTextElement.textContent;
+    //         editDiv.style.display = "block";
+    //     });
+    // }
+
+    // for (var i = 0; i < saveButtons.length; i++) {
+    //     saveButtons[i].addEventListener("click", function() {
+    //         var commentId = this.parentElement.parentElement.querySelector(".edit").getAttribute("data-comment-id");
+    //         var editDiv = this.parentElement;
+    //         var editInput = editDiv.querySelector(".edit-comment-input");
+    //         var commentTextElement = editDiv.parentElement.querySelector(".comment-text");
+
+    //         var editedComment = editInput.value;
+    //         var url = "/comment-edit/" + commentId;
+
+    //         fetch(url, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/x-www-form-urlencoded",
+    //                 "X-CSRFToken": '{{ csrf_token }}'
+    //             },
+    //             body: "edited_comment=" + encodeURIComponent(editedComment)
+    //         })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 commentTextElement.textContent = editedComment;
+    //                 commentTextElement.style.display = "inline";
+    //                 editDiv.style.display = "none";
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error("오류 발생:", error);
+    //         });
+
+    //         commentTextElement.textContent = editInput.value;
+    //         commentTextElement.style.display = "inline";
+    //         editDiv.style.display = "none";
+    //     });
+    //     }
+    // });
+
     document.addEventListener("DOMContentLoaded", function() {
-    var editButtons = document.querySelectorAll(".edit");
-    var saveButtons = document.querySelectorAll(".save-comment");
+        var editButtons = document.querySelectorAll(".material-symbols-outlined.edit");
+        var saveButtons = document.querySelectorAll(".save-comment");
 
-    for (var i = 0; i < editButtons.length; i++) {
-        editButtons[i].addEventListener("click", function() {
-            var commentId = this.getAttribute("data-comment-id");
-            var commentTextElement = this.parentElement.querySelector(".comment-text");
-            var editDiv = this.parentElement.parentElement.querySelector(".edit-comment");
-            var editInput = editDiv.querySelector(".edit-comment-input");
+        for (var i = 0; i < editButtons.length; i++) {
+            editButtons[i].addEventListener("click", function() {
+                var commentId = this.getAttribute("data-comment-id");
+                var commentDescription = this.closest(".comment").querySelector(".comment-description");
+                var editComment = this.closest(".comment").querySelector(".edit-comment");
 
-            commentTextElement.style.display = "none";
-            editInput.value = commentTextElement.textContent;
-            editDiv.style.display = "block";
-        });
-    }
-
-    for (var i = 0; i < saveButtons.length; i++) {
-        saveButtons[i].addEventListener("click", function() {
-            var commentId = this.parentElement.parentElement.querySelector(".edit").getAttribute("data-comment-id");
-            var editDiv = this.parentElement;
-            var editInput = editDiv.querySelector(".edit-comment-input");
-            var commentTextElement = editDiv.parentElement.querySelector(".comment-text");
-
-            var editedComment = editInput.value;
-            var url = "/comment-edit/" + commentId;
-
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRFToken": '{{ csrf_token }}'
-                },
-                body: "edited_comment=" + encodeURIComponent(editedComment)
-            })
-            .then(response => {
-                if (response.ok) {
-                    commentTextElement.textContent = editedComment;
-                    commentTextElement.style.display = "inline";
-                    editDiv.style.display = "none";
-                }
-            })
-            .catch(error => {
-                console.error("오류 발생:", error);
+                commentDescription.style.display = "none";
+                editComment.style.display = "block";
             });
+        }
 
-            commentTextElement.textContent = editInput.value;
-            commentTextElement.style.display = "inline";
-            editDiv.style.display = "none";
-        });
+        for (var i = 0; i < saveButtons.length; i++) {
+            saveButtons[i].addEventListener("click", function() {
+                // var commentId = this.getAttribute("data-comment-id");
+                var editButton = document.querySelector("#edit-comment-id");
+                var commentId = editButton.getAttribute("data-comment-id");
+
+                console.log(commentId);
+
+                var editDiv = this.closest(".edit-comment");
+                var editInput = editDiv.querySelector(".edit-comment-input");
+                var commentDescription = this.closest(".comment").querySelector(".comment-description");
+
+                var editedComment = editInput.value;
+                var url = "/comment-edit/" + commentId;
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": '{{ csrf_token }}'
+                    },
+                    body: "edited_comment=" + encodeURIComponent(editedComment)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        commentDescription.querySelector(".comment-text").textContent = editedComment;
+                        commentDescription.style.display = "block";
+                        editDiv.style.display = "none";
+                    }
+                })
+                .catch(error => {
+                    console.error("오류 발생:", error);
+                });
+            });
         }
     });
 
