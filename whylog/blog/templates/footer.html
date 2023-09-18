@@ -5,15 +5,17 @@
 <footer class="footer">
     <div class="container">
         <div class="searchBoxArea">
-            <div class="searchBox">
-                <input class="searchBox-input" placeholder="검색">
-                <div class="searchBox-icon">
-                    <span class="searchBox-Button material-symbols-outlined" title="검색">search</span>
+            <form methoc="get" action="{% url 'search' %}">
+                <div class="searchBox">
+                    <input class="searchBox-input" name="searchBox-input" placeholder="검색">
+                    <div class="searchBox-icon">
+                        <span class="searchBox-Button material-symbols-outlined" title="검색">search</span>
+                    </div>
                 </div>
-            </div>
-            <div class="mic">
-                <span class="searchBox-Button  material-symbols-outlined" title="음성으로 검색">mic</span>
-            </div>
+                <div class="mic">
+                    <span class="searchBox-Button  material-symbols-outlined" title="음성으로 검색">mic</span>
+                </div>
+            </form>
         </div>
         <p>
             Made with <span>Why jo</span>
