@@ -16,6 +16,7 @@
 .footer .container{
     align-items: self-end;
     display: flex;
+    justify-content: space-between;
 }
 
 .footer .container p{
@@ -36,4 +37,28 @@ span{
 
 .container > span {
     font-weight: 700;
+}
+
+/* search */
+.searchBoxArea {
+    position: absolute;
+    left: 208px;
+    bottom: 35px;
+    display: flex;
+}
+
+.searchBox {
+    display: flex;
+    gap: 10px;
+}
+
+.mic {
+    padding-left: 5px;
+}
+
+.searchBox-input {
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    padding-left: 10px;
 }
