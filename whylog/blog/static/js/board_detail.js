@@ -1,13 +1,18 @@
 function toggleLike(liked) {
+    const likeCountElement = liked.nextElementSibling;
+    let likeCount = parseInt(likeCountElement.textContent);
     const likedId = liked.id;
   
     if (liked.classList.contains('liked')) {
         liked.style.fontVariationSettings = "'FILL' 0";
         liked.classList.remove('liked');
+        likeCount--;
     } else {
         liked.style.fontVariationSettings = "'FILL' 1";
         liked.classList.add('liked');
+        likeCount++;
     } 
+    likeCountElement.textContent = likeCount;
     saveCommentLike(likedId);
 }
 
