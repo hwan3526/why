@@ -162,3 +162,19 @@ aside {
     justify-content: center;
     color: #f9f8f4;
 }
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-clip: content-box;
+    border: 1px solid black;
+    background-color: #f9f8f4;
+}
+
+input[type="checkbox"]:checked {
+    background-color: black;
+    padding: 2px;
+    border: 1px solid black;
+}
