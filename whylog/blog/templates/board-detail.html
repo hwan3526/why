@@ -80,6 +80,7 @@
                       <div class="edit-comment" style="display:none;">
                         <input type="text" class="edit-comment-input" value="{{ comment.comment }}">
                         <button class="save-comment">수정</button>
+                        <button class="cancel-comment">취소</button>
                       </div>
 
                       <div class="comment-data">
@@ -198,63 +199,11 @@
       // 알림 표시
       alert('포스트 링크가 클립보드에 복사되었습니다');
     });
-    
-    // document.addEventListener("DOMContentLoaded", function() {
-    // var editButtons = document.querySelectorAll(".edit");
-    // var saveButtons = document.querySelectorAll(".save-comment");
-
-    // for (var i = 0; i < editButtons.length; i++) {
-    //     editButtons[i].addEventListener("click", function() {
-    //         var commentId = this.getAttribute("data-comment-id");
-    //         var commentTextElement = this.querySelector(".comment-description");
-    //         var editDiv = this.parentElement.parentElement.querySelector(".edit-comment");
-    //         var editInput = editDiv.querySelector(".edit-comment-input");
-
-    //         commentTextElement.style.display = "none";
-    //         editInput.value = commentTextElement.textContent;
-    //         editDiv.style.display = "block";
-    //     });
-    // }
-
-    // for (var i = 0; i < saveButtons.length; i++) {
-    //     saveButtons[i].addEventListener("click", function() {
-    //         var commentId = this.parentElement.parentElement.querySelector(".edit").getAttribute("data-comment-id");
-    //         var editDiv = this.parentElement;
-    //         var editInput = editDiv.querySelector(".edit-comment-input");
-    //         var commentTextElement = editDiv.parentElement.querySelector(".comment-text");
-
-    //         var editedComment = editInput.value;
-    //         var url = "/comment-edit/" + commentId;
-
-    //         fetch(url, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/x-www-form-urlencoded",
-    //                 "X-CSRFToken": '{{ csrf_token }}'
-    //             },
-    //             body: "edited_comment=" + encodeURIComponent(editedComment)
-    //         })
-    //         .then(response => {
-    //             if (response.ok) {
-    //                 commentTextElement.textContent = editedComment;
-    //                 commentTextElement.style.display = "inline";
-    //                 editDiv.style.display = "none";
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error("오류 발생:", error);
-    //         });
-
-    //         commentTextElement.textContent = editInput.value;
-    //         commentTextElement.style.display = "inline";
-    //         editDiv.style.display = "none";
-    //     });
-    //     }
-    // });
 
     document.addEventListener("DOMContentLoaded", function() {
         var editButtons = document.querySelectorAll(".material-symbols-outlined.edit");
         var saveButtons = document.querySelectorAll(".save-comment");
+        var cancelButtons = document.querySelectorAll(".cancel-comment");
 
         for (var i = 0; i < editButtons.length; i++) {
             editButtons[i].addEventListener("click", function() {
@@ -269,7 +218,6 @@
 
         for (var i = 0; i < saveButtons.length; i++) {
             saveButtons[i].addEventListener("click", function() {
-                // var commentId = this.getAttribute("data-comment-id");
                 var editButton = document.querySelector("#edit-comment-id");
                 var commentId = editButton.getAttribute("data-comment-id");
 
@@ -302,6 +250,28 @@
                 });
             });
         }
+
+        for (var i = 0; i < cancelButtons.length; i++) {
+          cancelButtons[i].addEventListener("click", function() {
+            var commentDescription = this.closest(".comment").querySelector(".comment-description");
+            var editComment = this.closest(".comment").querySelector(".edit-comment");
+
+            editComment.style.display = "none";
+            commentDescription.style.display = "block";
+          });
+        }
+
+        var editInputs = document.querySelectorAll(".edit-comment-input");
+        for (var i = 0; i < editInputs.length; i++) {
+          editInputs[i].addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                var saveButton = this.closest(".edit-comment").querySelector(".save-comment");
+                saveButton.click();
+            }
+          });
+        }
+
     });
 
   </script>
