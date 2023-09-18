@@ -217,3 +217,12 @@ button:hover{
 .notiContent > p {
   padding-top: 10px;
 }
+
+.nav-notifications:hover,
+.notificationContents:hover {
+  cursor: pointer;
+}
+
+.notificationContents p span {
+  font-weight: 900;
+}
