@@ -305,7 +305,8 @@ body > a {
     padding: 5px;
 }
 
-.save-comment {
+.save-comment,
+.cancel-comment {
     background-color:  #e1e0db;
     text-decoration: none;
     color: #1e1e1e;
