@@ -12,6 +12,13 @@ function toggleLike(liked) {
         liked.classList.add('liked');
         likeCount++;
     } 
+
+    if (likeCount < 1) {
+        likeCountElement.style.display = 'none';
+    } else {
+        likeCountElement.style.display = 'inline';
+    }
+
     likeCountElement.textContent = likeCount;
     saveCommentLike(likedId);
 }
