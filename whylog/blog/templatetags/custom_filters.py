@@ -10,7 +10,6 @@ def remove_img_tags(value):
         img_tag.decompose()
     return str(soup)
 
-
 @register.filter
 def get_from_dict(dictionary, key):
     return dictionary.get(key, "")
