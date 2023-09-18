@@ -89,12 +89,13 @@ def get_notifications(request):
 @receiver(post_save, sender=Comment)
 def create_comment_notification(sender, instance, created, **kwargs):
     if created:
-        Alarm.objects.create(
-            user=instance.user,
-            target_user=instance.like.user, 
-            comment=instance,
-            like=None,
-        )
+        if Comment:
+            Alarm.objects.create(
+                user=instance.user,
+                target_user=instance.blog.user, 
+                comment=instance,
+                like=None,
+            )
 
 @receiver(post_save, sender=Like)
 def create_Like_notification(sender, instance, created, **kwargs):
