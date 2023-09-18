@@ -9,7 +9,6 @@ notification.addEventListener("click", () => {
     } else {
         notiList.style.display = 'none';
     }
-    notiCount.style.display = 'none';
 });
 
 let isNotificationListVisible = true;
