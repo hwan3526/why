@@ -25,7 +25,7 @@
 
                 <div class="nav-notification">
                     <span class="nav-notifications material-symbols-outlined" title="알림">notifications</span>
-                    {% if notifications.recent_alarms%}
+                    {% if notifications.recent_alarms %}
                         <div class="notificationCount">
                     {% else %}
                         <div class="notificationCount" style="display: none;">
@@ -42,8 +42,8 @@
                             {% if notifications.blog_comment %}
                             {% for items in notifications.blog_comment %}
                                 <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog.id }}, {{ items.alarm_id }})">
-                                    <p>{{ items.blog.title }} 에</p>
-                                    <p>{{ items.comment.user.username }} 님이 댓글을 달았습니다.</p>
+                                    <p><span>{{ items.blog.title }}</span> 에</p>
+                                    <p><span>{{ items.comment.user.username }}</span> 님이 댓글을 달았습니다.</p>
                                     <p>{{ items.comment.upload_date | date:'Y-m-d H:i:s' }}</p>
                                 </div>
                             {% endfor %}
@@ -52,8 +52,8 @@
                             {% if notifications.blog_like %}
                             {% for items in notifications.blog_like %}
                                 <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog.id }}, {{ items.alarm_id }})">
-                                    <p>{{ items.blog.title }} 에</p>
-                                    <p>{{ items.blog.user.username }} 님이 좋아요를 눌렀습니다.</p>
+                                    <p><span>{{ items.blog.title }}</span> 에</p>
+                                    <p><span>{{ items.blog.user.username }}</span> 님이 좋아요를 눌렀습니다.</p>
                                     <p>{{ items.blog.upload_date | date:'Y-m-d H:i:s' }}</p>
                                 </div>
                             {% endfor %}
@@ -62,8 +62,8 @@
                             {% if notifications.comment_like %}
                             {% for items in notifications.comment_like %}
                                 <div class="notificationContents" onclick="redirectToBlogDetail({{ items.blog_id }}, {{ items.alarm_id }})">
-                                    <p>{{ items.comment.comment }} 에</p>
-                                    <p>{{ items.comment.user.username }} 님이 좋아요를 눌렀습니다.</p>
+                                    <p><span>{{ items.comment.comment }}</span> 에</p>
+                                    <p><span>{{ items.comment.user.username }}</span> 님이 좋아요를 눌렀습니다.</p>
                                     <p>{{ items.comment.upload_date | date:'Y-m-d H:i:s' }}</p>
                                 </div>
                             {% endfor %}
