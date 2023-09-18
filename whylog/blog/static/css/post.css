@@ -251,6 +251,18 @@ body > a {
     display: flex;
     align-items: center;
     margin: 5px 5px 0px 0px;
+    flex-direction: row;
+    /* justify-content: space-between; */
+}
+
+.comment > div:first-child {
+    width: 50px;
+}
+
+.comment-description, 
+.edit-comment {
+    margin-left: 20px;
+    width: 300px;
 }
 
 .comment-user {
@@ -260,6 +272,21 @@ body > a {
 .comment-date {
     font-size: small;
     font-weight: 400;
+    margin-right: 5px;
+}
+
+.comment-data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; 
+}
+
+.comment-like-area {
+    width: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .comment-liked {
@@ -270,6 +297,12 @@ body > a {
 .edit-comment {
     background-color: #f9f8f4;
     border: none;
+}
+
+.edit-comment-input {
+    border: none;
+    outline: none;
+    padding: 5px;
 }
 
 .save-comment {
@@ -296,4 +329,17 @@ body > a {
 .delete:hover,
 .comment-button:hover {
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: #1E1E1E;
+}
+
+.comment span {
+    font-weight: 400 !important;
+}
+
+.comment .material-symbols-outlined {
+    font-weight: 300 !important;
 }
