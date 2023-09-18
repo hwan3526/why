@@ -75,7 +75,8 @@ def get_notifications(request):
 
             for like in likes:
                 if like.blog:
-                    blog_like = {"blog": blog, "alarm_id": alarm.id}
+                    find_like_blog = Blog.objects.get(pk=like.blog.id)
+                    blog_like = {"blog": find_like_blog, "alarm_id": alarm.id}
                     notifications['blog_like'].append(blog_like)
 
                 if like.comment:
@@ -122,7 +123,6 @@ def alarm_read(request, alarm_id):
         alarm.isRead = True
         alarm.save()
     return HttpResponse(status=200)
-
 
 def board(request, category_id=None):
     theme = 'dark'
@@ -425,7 +425,6 @@ def search(request):
     topics = Category.objects.all()
 
     search_text = request.GET.get('searchBox-input')
-    print(search_text)
 
     blog_results = Blog.objects.filter(
         Q(title__icontains=search_text) | Q(content__icontains=search_text)  
