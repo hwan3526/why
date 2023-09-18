@@ -117,10 +117,10 @@ button:hover{
 }
 
 .row-box{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 20px;
+} 
 
 .logo-wrap {
   width: 100%;
@@ -151,6 +151,10 @@ button:hover{
 }
 
 /* notification settings */
+.nav-notification {
+  position: relative;
+}
+
 .notificationCount {
   display: flex;
   position: absolute;
@@ -164,16 +168,15 @@ button:hover{
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  right: 578px;
-  top: 35px;
+  right: -3px;
+  top: -4px;
   color: #F9F8F4;
 }
 
 .notificationList {
   display: flex;
   position: absolute;
-  right: 550px;
-  top: 30px;
+  top: 40px; 
   border-radius: 5px;
   background-color: #F9F8F4;
   color: #1E1E1E;
@@ -200,10 +203,11 @@ button:hover{
 }
 
 .notificationContents {
-  display: flex;
+  display: inline-block;
   gap: 10px;
   padding-bottom: 10px;
   align-items: center;
+  min-width: content;
 }
 
 .notiContent {
