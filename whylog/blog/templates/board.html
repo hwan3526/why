@@ -21,7 +21,13 @@
     {% include 'header.html' %}
 
     <div class="post-list">
-
+        {% if not posts%}
+        <script>
+            window.onload = function() {
+                alert('현재 페이지에 게시물이 없습니다.')   
+            };
+        </script>
+        {% endif %}
         {% for post in posts %} {% if forloop.first %}
         <section class ="first-post-box">
             <div class="container">
@@ -51,7 +57,10 @@
         
                         <div class="card-info-box">
                             <p>{{ post.upload_date | date:'Y-m-d H:i:s' }}</p>
-                            <h3>{{ post.title }}</h3>
+                            <div class="post-title">
+                                <h3>{{ post.title }}</h3>
+                                <p class="post-comment">{% if post.comments %} [{{ post.comments }}] {% endif %}</p>
+                            </div>
                             <p>
                                 {{ post.content | remove_img_tags | striptags | linebreaksbr }}
                             </p>

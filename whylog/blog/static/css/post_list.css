@@ -160,15 +160,16 @@ body{
 h3 {
     font-family: 'Pretendard', sans-serif;
     font-size: 20px;
-    margin-bottom: 8px;
 }
 
 .card-info-box h3{
     font-size: 20px;
     font-weight: 700;
+    margin-bottom: 10px;
     overflow: hidden;
     word-break: break-word;
     text-overflow: ellipsis;
+    width: 90%;
 
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -177,7 +178,7 @@ h3 {
 
 .card-info-box p {
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     line-height: 25px;
     overflow: hidden;
     word-break: break-word;
@@ -186,6 +187,17 @@ h3 {
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical
+}
+
+.card-info-box .post-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-info-box .post-comment {
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .sub-info {
