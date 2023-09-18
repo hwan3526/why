@@ -274,7 +274,10 @@ def board_detail(request, blog_id=None):
     recommended_blogs = Blog.objects.filter(category=blog.category, temporary=False, in_private=False).exclude(id=blog.id).order_by('-upload_date')[:2]
 
     for recommended_blog in recommended_blogs:
-        recommended_blog.image_tag = extract_image_src(recommended_blog.content)
+        if extract_image_src(recommended_blog.content):
+            recommended_blog.image_tag = extract_image_src(recommended_blog.content)
+        else:
+            recommended_blog.image_tag = 'media/dudon.png'
     
     comment_form = None
     if request.user:        
