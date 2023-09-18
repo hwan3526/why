@@ -47,6 +47,11 @@ span{
     display: flex;
 }
 
+.searchBoxArea > form {
+    display: flex;
+    flex-direction: row;
+}
+
 .searchBox {
     display: flex;
     gap: 10px;
