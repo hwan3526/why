@@ -9,3 +9,8 @@ def remove_img_tags(value):
     for img_tag in soup.find_all('img'):
         img_tag.decompose()
     return str(soup)
+
+
+@register.filter
+def get_from_dict(dictionary, key):
+    return dictionary.get(key, "")
