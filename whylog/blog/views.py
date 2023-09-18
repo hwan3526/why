@@ -294,7 +294,7 @@ def board_detail(request, blog_id=None):
     if request.user:        
         comment_form = CommentForm()
 
-    comments = Comment.objects.filter(blog_id = blog_id)
+    comments = Comment.objects.filter(blog_id = blog_id).order_by('upload_date')
 
     like_post = None
     liked_comments = None
