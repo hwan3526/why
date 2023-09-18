@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from collections import defaultdict
 from bs4 import BeautifulSoup
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -53,7 +54,7 @@ def extract_image_src(html_content):
     
 def get_notifications(request):
     finduser = User.objects.get(pk=request.user.id)
-    recent_alarms = Alarm.objects.filter(user=finduser, isRead=False)
+    recent_alarms = Alarm.objects.filter(target_user=finduser, isRead=False)
 
     notifications = {
         'recent_alarms': len(recent_alarms),
@@ -98,12 +99,20 @@ def create_comment_notification(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Like)
 def create_Like_notification(sender, instance, created, **kwargs):
     if created:
-        Alarm.objects.create(
-            user=instance.user,
-            target_user=instance.comment.user, 
-            comment=None,
-            like=instance,
-        )
+        if instance.blog:
+            Alarm.objects.create(
+                user=instance.user,
+                target_user=instance.blog.user, 
+                comment=None,
+                like=instance,
+            )
+        if instance.comment:
+            Alarm.objects.create(
+                user=instance.user,
+                target_user=instance.comment.user, 
+                comment=None,
+                like=instance,
+            )
 
 @login_required
 def alarm_read(request, alarm_id):
@@ -290,8 +299,19 @@ def board_detail(request, blog_id=None):
     
     if request.user.is_authenticated:
         finduser = User.objects.get(pk=request.user.id)
-        like_post = Like.objects.filter(user=finduser, blog=blog)
-        liked_comments = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+        liked_comment_ids = Like.objects.filter(user=finduser, comment__in=comments).values_list('comment_id', flat=True)
+    else:
+        liked_comment_ids = Like.objects.filter(comment__in=comments).values_list('comment_id', flat=True)
+
+    like_post_user_ids = Like.objects.filter(blog=blog).values_list('user', flat=True)
+    liked_comments = Like.objects.filter(comment__in=comments)
+    comment_like_count = defaultdict(int)
+
+    for like in liked_comments:
+        comment_id = like.comment_id
+        comment_like_count[comment_id] += 1
+
+    comment_like_count = dict(comment_like_count)
 
     notifications = []
     if request.user.is_authenticated:
@@ -308,8 +328,9 @@ def board_detail(request, blog_id=None):
         'topics' : topics,
         'comment_form' : comment_form,
         'comments' : comments,
-        'like_post' : like_post,
-        'liked_comments' : liked_comments,
+        'like_post' : like_post_user_ids,
+        'liked_comment' : liked_comment_ids,
+        'comment_like_count' : comment_like_count,
         'notifications': notifications,
     }
 
