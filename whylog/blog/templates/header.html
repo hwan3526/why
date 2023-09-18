@@ -25,12 +25,12 @@
 
                 <div class="nav-notification">
                     <span class="nav-notifications material-symbols-outlined" title="알림">notifications</span>
-                    {% if notifications.recent_alarms|length > 0 %}
+                    {% if notifications.recent_alarms%}
                         <div class="notificationCount">
                     {% else %}
                         <div class="notificationCount" style="display: none;">
                     {% endif %}
-                            <span>{{ notifications.recent_alarms|length }}</span>
+                            <span>{{ notifications.recent_alarms }}</span>
                         </div>
                     <div class="notificationList" style="display: none;">
                         <div class="notiHeader">
