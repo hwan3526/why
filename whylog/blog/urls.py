@@ -31,6 +31,7 @@ urlpatterns = [
     path('like-blog/<int:blog_id>', like_blog_toggle, name='like_blog'),
 
     path('alarm-read/<int:alarm_id>', alarm_read, name='alarm_read'),
+    path('search/', search, name='search'),
 
     path('accounts/profile/', board_view, name='board_view'),
 ]

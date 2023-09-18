@@ -417,3 +417,46 @@ def like_blog_toggle(request, blog_id):
         return HttpResponse(status=200)
 
     return redirect('board_detail', blog_id = blog_id)
+
+def search(request):
+    theme = 'dark'
+    is_logined = False
+    topics = Category.objects.all()
+
+    search_text = request.GET.get('searchBox-input')
+    print(search_text)
+
+    blog_results = Blog.objects.filter(
+        Q(title__icontains=search_text) | Q(content__icontains=search_text)  
+    )
+
+    comment_results = Comment.objects.filter(
+        Q(comment__icontains=search_text)
+    )
+
+    for comment in comment_results:
+        comment.blog_info = Blog.objects.get(id=comment.blog_id)
+
+    blog_list = list(blog_results)
+    for comment in comment_results:
+        blog_list.append(comment.blog_info)
+
+    for post in blog_list:
+        if extract_image_src(post.content):
+            post.image_tag = extract_image_src(post.content)
+        else:
+            post.image_tag = 'media/dudon.png'
+
+    notifications = []
+    if request.user.is_authenticated:
+        notifications = get_notifications(request)['recent_alarms']
+
+    context = {
+        'theme': theme, 
+        "is_logined": is_logined, 
+        'posts': blog_list, 
+        'topics' : topics,
+        'notifications': notifications,
+    }
+
+    return render(request, 'board.html', context)
