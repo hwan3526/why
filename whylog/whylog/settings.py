@@ -88,9 +88,13 @@ DATABASES = {
         'PASSWORD': secrets['PASSWORD'],
         'HOST': secrets['HOST'],
         'PORT': secrets['PORT'],
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'test_db.sqlite3'),
     }
 }
-
+DATABASES['default']['TEST'] = {'NAME': DATABASES['test']['NAME']}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
