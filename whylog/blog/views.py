@@ -17,7 +17,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from collections import defaultdict
 from bs4 import BeautifulSoup
-
+import openai
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -460,3 +460,27 @@ def search(request):
     }
 
     return render(request, 'board.html', context)
+
+openai.api_key = settings.API_KEY
+
+def autocomplete(request):
+    print('응답')
+    if request.method == "POST":
+        
+
+        #제목 필드값 가져옴
+        prompt = request.POST.get('title')
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            # 반환된 응답에서 텍스트 추출해 변수에 저장
+            message = response['choices'][0]['message']['content']
+        except Exception as e:
+            message = str(e)
+        return JsonResponse({"message": message})
+    return render(request, 'autocomplete.html')
