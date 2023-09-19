@@ -464,10 +464,8 @@ def search(request):
 openai.api_key = settings.API_KEY
 
 def autocomplete(request):
-    print('응답')
     if request.method == "POST":
         
-
         #제목 필드값 가져옴
         prompt = request.POST.get('title')
         try:
@@ -483,4 +481,4 @@ def autocomplete(request):
         except Exception as e:
             message = str(e)
         return JsonResponse({"message": message})
-    return render(request, 'autocomplete.html')
+    return redirect('board')
