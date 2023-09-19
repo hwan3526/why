@@ -59,7 +59,14 @@
                             <p>{{ post.upload_date | date:'Y-m-d H:i:s' }}</p>
                             <div class="post-title">
                                 <h3>{{ post.title }}</h3>
-                                <p class="post-comment">{% if post.comments %} [{{ post.comments }}] {% endif %}</p>
+                                <p class="post-comment">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                    {{ post.counts }}
+                                    <span class="material-symbols-outlined">favorite</span>
+                                    {{ post.likes }}
+                                    <span class="material-symbols-outlined">comment</span>
+                                    {{ post.comments }}
+                                </p>
                             </div>
                             <p>
                                 {{ post.content | remove_img_tags | striptags | linebreaksbr }}

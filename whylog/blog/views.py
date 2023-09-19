@@ -142,6 +142,8 @@ def board(request, category_id=None):
         ).order_by('-upload_date__date', '-count')
 
     for post in posts:
+        post.counts = Blog.objects.filter(Q(id=post.id)).values('count')[0]['count']
+        post.likes = Like.objects.filter(Q(blog_id=post.id)).count()
         post.comments = Comment.objects.filter(Q(blog_id=post.id)).count()
         if extract_image_src(post.content):
             post.image_tag = extract_image_src(post.content)
