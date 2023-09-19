@@ -10,16 +10,6 @@ searchBox.addEventListener('blur', () => {
     searchBox.setAttribute('placeholder', originalPlaceholder);
 });
 
-searchIcon.addEventListener("click", function () {
-    search(searchBox.value);
-});
-searchBox.addEventListener("keypress", function (event) {
-    if (event.keyCode === 13) {
-        search(searchBox.value);
-    }
-});
-
-
 // 음성인식 검색
 const searchConsole = document.querySelector(".mic");
 function availabilityFunc() {
