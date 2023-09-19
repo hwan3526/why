@@ -80,6 +80,20 @@ aside {
     justify-content: center;
 }
 
+.ai-button img{
+    width: 40px;
+}
+
+.loading-animation > img{
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.loading-animation {
+    width: 10px !important;
+    height: 10px !important;
+}
+
 .topic-wrapper {
     display: block;
     border: 1px solid #cac8c5;
