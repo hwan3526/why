@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRETS_DIR = BASE_DIR / 'whylog'
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'secrets.json')))
 SECRET_KEY = secrets['SECRET_KEY']
+API_KEY = secrets['API_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
