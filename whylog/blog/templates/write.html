@@ -35,6 +35,7 @@
             'X-CSRFToken': '{{ csrf_token }}'
             }
         })
+        
         .then(response => response.json())
         .then(data => {
             console.log(this.files[0].name);
@@ -44,7 +45,39 @@
         .catch(error => console.error('Error:', error));
         });
     });
+    document.getElementById('aiAutocompleteButton').addEventListener('click', function() {
+        // 로딩 애니메이션 
+        document.getElementById('loading-animation').style.display = 'block';
+        document.getElementById('ai-img').style.display = 'none';
 
+        let title = document.getElementById('title').value;
+        fetch('/autocomplete/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}',
+          },
+          body: new URLSearchParams({
+            'title': title
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('loading-animation').style.display = 'none';
+          document.getElementById('ai-img').style.display = 'block';
+      
+          //기존 내용에 자동완성 된 내용 더함
+          let currentContent = tinyMCE.activeEditor.getContent();
+        data.message = data.message.replace(/\n/g, '<br>');
+        tinyMCE.activeEditor.setContent(currentContent + data.message);
+        
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('loading-animation').style.display = 'none';
+        });
+      });
+    
     </script>   
     
 </head>
@@ -78,7 +111,7 @@
 
             <aside>
                 <div class="ai-auto-write">
-                    <button>AI 글 자동완성</button>
+                    <button class="ai-button" id="aiAutocompleteButton">AI 글 자동완성</button>
                 </div>
 
                 <div class="topic-wrapper">
