@@ -14,3 +14,40 @@ document.getElementById('post_write').addEventListener('submit', function(event)
         event.preventDefault();
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var temporaryButton = document.getElementById('temporary-btn');
+    var tempPostBox = document.querySelector('.temp-post-box');
+
+    temporaryButton.addEventListener('click', function() {
+        tempPostBox.style.display = 'block';
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target == tempPostBox) {
+            tempPostBox.style.display = 'none';
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var title = document.querySelector('.title');
+    var popupTitles = document.querySelectorAll('.popup-title');
+
+    popupTitles.forEach(function(popupTitle) {
+        popupTitle.addEventListener('click', function() {
+            var postId = this.querySelector('.popup-title > input');
+            console.log(postId);
+            var postTitleTag = postId.nextElementSibling;
+            var postContentTag = postTitleTag.nextElementSibling;
+        
+            var postTitle = postTitleTag.querySelector('span').textContent;
+            var postContent = postContentTag.value;
+        
+            title.value = postTitle;
+            var editor = tinymce.get('content');
+            editor.setContent(postContent);
+        });
+    });
+
+}); 

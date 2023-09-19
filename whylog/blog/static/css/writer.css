@@ -197,3 +197,26 @@ input[type="checkbox"]:checked {
     padding: 2px;
     border: 1px solid black;
 }
+
+.temp-post-box {
+    margin-top: 15px;
+    border: 1px solid #cac8c5;
+    border-radius: 3px;
+    width: 100%;
+    padding: 10px;
+}
+
+.temp-post-box > h5 {
+    padding-bottom: 10px;
+}
+
+.popup-title {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+.popup-title:hover {
+    cursor: pointer;
+}
