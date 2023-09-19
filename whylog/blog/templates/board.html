@@ -37,6 +37,13 @@
                         <p>{{post.content | remove_img_tags | safe }}</p>
                     </a>
                     <button onclick="location.href='/board-detail/{{post.id}}'">READ MORE</button>
+                    <span class="material-symbols-outlined">visibility</span>
+                    {{ post.counts }}
+                    <span class="material-symbols-outlined">favorite</span>
+                    {{ post.likes }}
+                    <span class="material-symbols-outlined">comment</span>
+                    {{ post.comments }}
+                    <p>{{ post.upload_date | date:'Y-m-d H:i:s' }}</p>
                 </div>
                 <div class="thumbnail-img">
                     <img href="/board-detail/{{post.id}}" src="{% static post.image_tag %}">
