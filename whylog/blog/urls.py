@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('alarm-read/<int:alarm_id>', alarm_read, name='alarm_read'),
     path('search/', search, name='search'),
+    path('autocomplete/', autocomplete, name='autocomplete'),
 
     path('accounts/profile/', board_view, name='board_view'),
 ]
