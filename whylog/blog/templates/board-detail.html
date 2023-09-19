@@ -106,7 +106,7 @@
                         <span class="material-symbols-outlined edit" id="edit-comment-id" data-comment-id="{{ comment.id }}">edit</span>
                         {% endif %}
                         {% if user.id == comment.user.id or user.id == 1 %}
-                            <a href="{% url 'comment_delete' comment.id %}">
+                            <a href="{% url 'comment_delete' comment.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">
                               <span class="material-symbols-outlined">delete</span>
                             </a>
                         {% endif %}
@@ -138,7 +138,7 @@
             <form method="POST" action="{% url 'board_delete' blog.id %}">
               {% csrf_token %}
               <input type="hidden" name="delete-button" value="true">
-              <button type="submit" class="delete-button">삭제하기</button>
+              <button type="submit" class="delete-button" onclick="return confirm('정말 삭제하시겠습니까?')">삭제하기</button>
             {% endif %}
             </form>
           </div>
