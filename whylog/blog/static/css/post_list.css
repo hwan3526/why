@@ -152,7 +152,7 @@ body{
 .card-info-box {
   display: flex;
   flex-direction: column;
-  height: 160px;
+  height: 200px;
   color: #1e1e1e;
   font-family: 'Pretendard', sans-serif;
 }
@@ -169,7 +169,8 @@ h3 {
     overflow: hidden;
     word-break: break-word;
     text-overflow: ellipsis;
-    width: 90%;
+    width: 40%;
+    height: 1em;
 
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -195,7 +196,7 @@ h3 {
     justify-content: space-between;
 }
 
-.card-info-box .post-comment {
+.card-info-box .post-info {
     font-size: 20px;
     font-weight: 700;
 }
