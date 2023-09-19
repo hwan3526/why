@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.contrib.auth.models import User
 from django.db.models import Q
 from . models import *
@@ -18,6 +20,7 @@ from django.db.models.signals import post_save
 from collections import defaultdict
 from bs4 import BeautifulSoup
 import openai
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -29,6 +32,12 @@ class UserViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+
+    @action(detail=False)
+    def unpublished(self, request):
+        queryset = self.queryset.filter(temporary=False)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -203,11 +212,12 @@ def logout(request):
 def write(request, blog_id=None):
     theme = 'light'
     topics = Category.objects.all()
+    temporary = Blog.objects.filter(user=request.user.id, temporary=True)
 
     if blog_id:
         blog = get_object_or_404(Blog, id=blog_id)
     else:
-        blog = Blog.objects.filter(user=request.user.id, temporary=True).order_by('-upload_date').first()
+        blog = Blog()
 
     if request.method == 'POST':
         form = BlogForm(request.POST, request.FILES, instance=blog)
@@ -251,6 +261,7 @@ def write(request, blog_id=None):
         'theme': theme,
         'form': form,  
         'post': blog, 
+        'temporary': temporary,
         'edit_mode': blog_id is not None, 
         'MEDIA_URL': settings.MEDIA_URL,
         'topics' : topics,
