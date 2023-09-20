@@ -138,7 +138,7 @@ def board(request, category_id=None):
     is_logined = False
     topics = Category.objects.all()
 
-    if request.user.id == 1:
+    if request.user.is_staff:
         posts = Blog.objects.filter(
             Q(category_id=category_id) if category_id else Q(),
             temporary=False
@@ -274,7 +274,7 @@ def write(request, blog_id=None):
 def board_delete(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
 
-    if request.user.id == 1 or request.user.id == blog.user.id:
+    if request.user.is_staff or request.user.id == blog.user.id:
         if request.method == 'POST': 
             if 'delete-button' in request.POST:
                 blog.delete()
@@ -380,7 +380,7 @@ def comment_write(request, blog_id):
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     blog_id = comment.blog.id
-    if request.user.id == comment.user.id or request.user.id == 1:
+    if request.user.id == comment.user.id or request.user.is_staff:
         comment.delete()
     return redirect('board_detail', blog_id = blog_id)
 
